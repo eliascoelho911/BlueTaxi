@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_back">Voltar</string>
+    <string name="cd_hide_password">Esconder senha</string>
+    <string name="cd_show_password">Mostrar senha</string>
+</resources>

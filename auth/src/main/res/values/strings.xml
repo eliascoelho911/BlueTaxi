@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_title">Bem vindo(a) de volta!</string>
+    <string name="login_subtitle">Entre na sua conta</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="forgot_password">Esqueceu sua senha?</string>
+    <string name="login">Entrar</string>
+    <string name="registration">Cadastre-se</string>
+    <string name="dont_have_account">Não tem uma conta?</string>
+</resources>
