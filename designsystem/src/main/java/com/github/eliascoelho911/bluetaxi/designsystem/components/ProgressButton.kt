@@ -65,7 +65,6 @@ fun ProgressButton(
             color = LocalContentColor.current, strokeWidth = 2.dp)
     },
     successContent: @Composable () -> Unit = {},
-    failureContent: @Composable () -> Unit = {},
     content: @Composable () -> Unit,
 ) {
     Button(
@@ -88,8 +87,6 @@ fun ProgressButton(
                 state = ProgressButtonState.LOADING)
             transition.ShowContentOnState(content = successContent,
                 state = ProgressButtonState.SUCCESS)
-            transition.ShowContentOnState(content = failureContent,
-                state = ProgressButtonState.FAILURE)
             transition.ShowContentOnState(content = content,
                 state = ProgressButtonState.CONTENT)
         }
@@ -113,7 +110,7 @@ private fun Transition<ProgressButtonState>.ShowContentOnState(
 }
 
 enum class ProgressButtonState {
-    LOADING, SUCCESS, FAILURE, CONTENT
+    LOADING, SUCCESS, CONTENT
 }
 
 private const val AnimationDurationMillis = 500
@@ -136,29 +133,11 @@ private fun ProgressButtonLightContentSuccess() {
 }
 
 @Composable
-@Preview("Light - Content -> Failed")
-private fun ProgressButtonLightContentFailed() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        StateToStatePreview(initialState = ProgressButtonState.CONTENT,
-            targetState = ProgressButtonState.FAILURE)
-    }
-}
-
-@Composable
 @Preview("Dark - Content -> Success")
 private fun ProgressButtonDarkContentSuccess() {
     BlueTaxiTheme(useDarkTheme = false) {
         StateToStatePreview(initialState = ProgressButtonState.CONTENT,
             targetState = ProgressButtonState.SUCCESS)
-    }
-}
-
-@Composable
-@Preview("Dark - Content -> Failed")
-private fun ProgressButtonDarkContentFailed() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        StateToStatePreview(initialState = ProgressButtonState.CONTENT,
-            targetState = ProgressButtonState.FAILURE)
     }
 }
 
@@ -180,7 +159,6 @@ private fun StateToStatePreview(
         },
         state = state,
         successContent = { Icon(imageVector = Icons.Rounded.Done, contentDescription = null) },
-        failureContent = { Icon(imageVector = Icons.Rounded.Close, contentDescription = null) },
         content = {
             Text(text = "Button")
         })

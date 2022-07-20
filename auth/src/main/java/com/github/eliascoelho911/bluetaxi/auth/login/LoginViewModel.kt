@@ -4,32 +4,50 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.github.eliascoelho911.bluetaxi.core.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import kotlinx.coroutines.delay
-
-private const val DELAY_TO_SHOW_CONTENT_ON_FAILURE = 2000L
 
 internal class LoginViewModel : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
 
-    suspend fun login(credentials: Credentials) {
-        loggingInState()
+    suspend fun login(email: String, password: String) {
+        if (!validateEmail(email)) return
+
+        loadingLogin()
         delay(2000)
         failureOnLoggingInState()
+    }
+
+    fun validateEmail(email: String): Boolean {
+        val emailIsValid = EmailValidator.isEmail(email)
+        if (!emailIsValid) {
+            invalidEmailState()
+        } else {
+            uiState = uiState.copy(invalidEmailErrorIsVisible = false)
+        }
+
+        return emailIsValid
+    }
+
+    private fun invalidEmailState() {
+        uiState = LoginUiState(invalidEmailErrorIsVisible = true)
+    }
+
+    private fun loadingLogin() {
+        uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING)
     }
 
     private fun successOnLoggingInState() {
         uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS)
     }
 
-    private suspend fun failureOnLoggingInState() {
-        uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE)
-        delay(DELAY_TO_SHOW_CONTENT_ON_FAILURE)
-        uiState = LoginUiState()
+    private fun failureOnLoggingInState() {
+        uiState = LoginUiState(loginFailureDialogIsVisible = true)
     }
 
-    private fun loggingInState() {
-        uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING)
+    fun hideLoginFailureDialog() {
+        uiState = uiState.copy(loginFailureDialogIsVisible = false)
     }
 }

@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,6 +51,7 @@ object LoginScreenRoute : ScreenRoute {
 
 //todo testar cenário de erro
 //todo testar cenário de sucesso
+//todo implementar e testar cenáro de email/senha em branco
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoginScreen(loginViewModel: LoginViewModel) {
@@ -58,22 +59,29 @@ internal fun LoginScreen(loginViewModel: LoginViewModel) {
         val coroutineScope = rememberCoroutineScope()
         var email by remember { mutableStateOf(String()) }
         var password by remember { mutableStateOf(String()) }
+        val uiState = loginViewModel.uiState
 
         LoginScreenContent(
             modifier = Modifier.padding(contentPadding),
-            uiState = loginViewModel.uiState,
+            uiState = uiState,
             email = email,
             password = password,
             onEmailChange = {
                 email = it
+                if (uiState.invalidEmailErrorIsVisible) {
+                    loginViewModel.validateEmail(email)
+                }
             },
             onPasswordChange = {
                 password = it
             },
             onClickEnter = {
                 coroutineScope.launch {
-                    loginViewModel.login(Credentials(email, password))
+                    loginViewModel.login(email, password)
                 }
+            },
+            onDismissLoginFailureDialog = {
+                loginViewModel.hideLoginFailureDialog()
             }
         )
     }
@@ -88,6 +96,7 @@ private fun LoginScreenContent(
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onClickEnter: () -> Unit = {},
+    onDismissLoginFailureDialog: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
         Text(modifier = Modifier.padding(horizontal = ScreenPadding),
@@ -99,7 +108,8 @@ private fun LoginScreenContent(
         EmailTextField(
             email,
             onEmailChange = onEmailChange,
-            emailIsInvalid = uiState.showsInvalidEmailError
+            emailIsInvalid = uiState.invalidEmailErrorIsVisible,
+            modifier = Modifier.padding(horizontal = ScreenPadding)
         )
 
         Spacer(Modifier.height(24.dp))
@@ -113,21 +123,14 @@ private fun LoginScreenContent(
             label = { Text(text = stringResource(id = R.string.password)) }
         )
 
-        TextButton(onClick = { /*TODO*/ },
-            modifier = Modifier
-                .align(Alignment.End)
-                .padding(end = ScreenPadding),
-            colors = TextButtonSecondaryContentColor
-        ) {
-            Text(text = stringResource(id = R.string.forgot_password))
-        }
-
         EnterButton(uiState.loginButtonState,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = ScreenPadding)
+                .padding(top = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            onClick = onClickEnter)
+            onClick = onClickEnter,
+            enabled = email.isNotBlank() && password.isNotBlank())
 
         TextButton(onClick = { /*TODO*/ },
             modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -146,6 +149,17 @@ private fun LoginScreenContent(
             })
         }
     }
+
+    if (uiState.loginFailureDialogIsVisible) {
+        AlertDialog(
+            onDismissRequest = onDismissLoginFailureDialog,
+            text = { Text(text = stringResource(id = R.string.login_failure)) },
+            confirmButton = {
+                TextButton(onClick = onDismissLoginFailureDialog) {
+                    Text(text = stringResource(id = android.R.string.ok))
+                }
+            })
+    }
 }
 
 @Composable
@@ -153,19 +167,17 @@ private fun EnterButton(
     loginButtonState: ProgressButtonState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = false,
 ) {
     ProgressButton(
         onClick = onClick,
         modifier = modifier,
         state = loginButtonState,
+        enabled = enabled,
         successContent = {
             Icon(imageVector = Icons.Rounded.Done,
                 contentDescription = stringResource(id = R.string.cd_login_success))
         },
-        failureContent = {
-            Icon(imageVector = Icons.Rounded.Close,
-                contentDescription = stringResource(id = R.string.cd_login_failure))
-        }
     ) {
         Text(text = stringResource(id = R.string.login))
     }
@@ -176,8 +188,9 @@ private fun EmailTextField(
     email: String,
     onEmailChange: (String) -> Unit,
     emailIsInvalid: Boolean,
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.padding(horizontal = ScreenPadding)) {
+    Column(modifier = modifier) {
         TextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
@@ -222,7 +235,7 @@ private fun EmailInvalidDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(showsInvalidEmailError = true),
+                uiState = LoginUiState(invalidEmailErrorIsVisible = true),
             )
         }
     }
@@ -258,7 +271,7 @@ private fun FailureLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE),
+                uiState = LoginUiState(loginFailureDialogIsVisible = true),
             )
         }
     }
@@ -278,7 +291,7 @@ private fun EmailInvalidLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(showsInvalidEmailError = true),
+                uiState = LoginUiState(invalidEmailErrorIsVisible = true),
             )
         }
     }
@@ -314,7 +327,7 @@ private fun FailureLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE),
+                uiState = LoginUiState(loginFailureDialogIsVisible = true),
             )
         }
     }
