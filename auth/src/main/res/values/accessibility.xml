@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cd_login_success">Logado com sucesso</string>
+    <string name="cd_login_failure">Não foi possível logar, pois o email ou senha estão incorretos</string>
+</resources>

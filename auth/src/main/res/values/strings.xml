@@ -8,4 +8,5 @@
     <string name="login">Entrar</string>
     <string name="registration">Cadastre-se</string>
     <string name="dont_have_account">Não tem uma conta?</string>
+    <string name="email_error">O email digitado é inválido</string>
 </resources>

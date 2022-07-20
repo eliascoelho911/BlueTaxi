@@ -54,6 +54,7 @@ object Versions {
     }
 
     object Compose {
+        const val constraintLayout = "1.0.1"
         const val navigation = "2.4.2"
         const val compose = "1.1.1"
         const val material3 = "1.0.0-alpha14"

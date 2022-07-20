@@ -16,6 +16,7 @@ object Dependencies {
         const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.Compose.compose}"
         const val icons = "androidx.compose.material:material-icons-extended:${Versions.Compose.compose}"
         const val navigation = "androidx.navigation:navigation-compose:${Versions.Compose.navigation}"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.constraintLayout}"
     }
 
     object Koin {
@@ -50,6 +51,10 @@ fun DependencyHandlerScope.compose() {
     "debugImplementation"(Dependencies.Compose.uiTooling)
     "debugImplementation"("androidx.customview:customview:1.2.0-alpha01")
     "debugImplementation"("androidx.customview:customview-poolingcontainer:1.0.0-alpha01")
+}
+
+fun DependencyHandlerScope.constraintLayoutCompose() {
+    "implementation"(Dependencies.Compose.constraintLayout)
 }
 
 fun DependencyHandlerScope.koin() {

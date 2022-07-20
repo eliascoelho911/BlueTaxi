@@ -45,6 +45,7 @@ object TestDependencies {
     }
 }
 
+//todo Separar implementação de testes unitários, de testes instrumentados
 fun DependencyHandlerScope.test() {
     "testImplementation"(TestDependencies.Robolectric.robolectric)
     "testImplementation"(TestDependencies.JUnit.junit)
