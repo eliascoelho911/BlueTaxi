@@ -122,7 +122,7 @@ private fun LoginScreenContent(
             Text(text = stringResource(id = R.string.forgot_password))
         }
 
-        EnterButton(uiState.loggingInState,
+        EnterButton(uiState.loginButtonState,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = ScreenPadding)
@@ -150,21 +150,14 @@ private fun LoginScreenContent(
 
 @Composable
 private fun EnterButton(
-    loggingInState: LoggingInState?,
+    loginButtonState: ProgressButtonState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val progressButtonState = when (loggingInState) {
-        LoggingInState.LOADING -> ProgressButtonState.LOADING
-        LoggingInState.SUCCESS -> ProgressButtonState.SUCCESS
-        LoggingInState.FAILURE -> ProgressButtonState.FAILURE
-        else -> ProgressButtonState.CONTENT
-    }
-
     ProgressButton(
         onClick = onClick,
         modifier = modifier,
-        state = progressButtonState,
+        state = loginButtonState,
         successContent = {
             Icon(imageVector = Icons.Rounded.Done,
                 contentDescription = stringResource(id = R.string.cd_login_success))
@@ -241,7 +234,7 @@ private fun LoadingLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.LOADING),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING),
             )
         }
     }
@@ -253,7 +246,7 @@ private fun SuccessLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.SUCCESS),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS),
             )
         }
     }
@@ -265,7 +258,7 @@ private fun FailureLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.FAILURE),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE),
             )
         }
     }
@@ -297,7 +290,7 @@ private fun LoadingLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.LOADING),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING),
             )
         }
     }
@@ -309,7 +302,7 @@ private fun SuccessLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.SUCCESS),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS),
             )
         }
     }
@@ -321,7 +314,7 @@ private fun FailureLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         Surface(color = MaterialTheme.colorScheme.background) {
             LoginScreenContent(
-                uiState = LoginUiState(loggingInState = LoggingInState.FAILURE),
+                uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE),
             )
         }
     }

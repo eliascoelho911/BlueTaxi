@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import kotlinx.coroutines.delay
 
 private const val DELAY_TO_SHOW_CONTENT_ON_FAILURE = 2000L
@@ -19,16 +20,16 @@ internal class LoginViewModel : ViewModel() {
     }
 
     private fun successOnLoggingInState() {
-        uiState = LoginUiState(loggingInState = LoggingInState.SUCCESS)
+        uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS)
     }
 
     private suspend fun failureOnLoggingInState() {
-        uiState = LoginUiState(loggingInState = LoggingInState.FAILURE)
+        uiState = LoginUiState(loginButtonState = ProgressButtonState.FAILURE)
         delay(DELAY_TO_SHOW_CONTENT_ON_FAILURE)
         uiState = LoginUiState()
     }
 
     private fun loggingInState() {
-        uiState = LoginUiState(loggingInState = LoggingInState.LOADING)
+        uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING)
     }
 }
