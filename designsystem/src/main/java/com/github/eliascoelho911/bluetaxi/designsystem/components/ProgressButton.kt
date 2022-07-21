@@ -1,12 +1,8 @@
 package com.github.eliascoelho911.bluetaxi.designsystem.components
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateInt
-import androidx.compose.animation.core.animateIntOffset
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
@@ -15,13 +11,10 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -44,7 +37,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
