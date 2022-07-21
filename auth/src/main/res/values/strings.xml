@@ -5,9 +5,9 @@
     <string name="email">Email</string>
     <string name="password">Senha</string>
     <string name="forgot_password">Esqueceu sua senha?</string>
-    <string name="login">Entrar</string>
+    <string name="login_submit">Entrar</string>
     <string name="registration">Cadastre-se</string>
     <string name="dont_have_account">Não tem uma conta?</string>
-    <string name="email_error">O email digitado é inválido</string>
+    <string name="invalid_email_error">O email digitado é inválido</string>
     <string name="login_failure">O email ou a senha estão incorretos. Tente novamente ou acesse "Esqueceu sua senha?"</string>
 </resources>

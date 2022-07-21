@@ -13,22 +13,12 @@ internal class LoginViewModel : ViewModel() {
         private set
 
     suspend fun login(email: String, password: String) {
-        if (!validateEmail(email)) return
+        if (!EmailValidator.isEmail(email))
+            invalidEmailState()
 
         loadingLogin()
         delay(2000)
         failureOnLoggingInState()
-    }
-
-    fun validateEmail(email: String): Boolean {
-        val emailIsValid = EmailValidator.isEmail(email)
-        if (!emailIsValid) {
-            invalidEmailState()
-        } else {
-            uiState = uiState.copy(emailIsInvalid = false)
-        }
-
-        return emailIsValid
     }
 
     private fun invalidEmailState() {
@@ -45,6 +35,19 @@ internal class LoginViewModel : ViewModel() {
 
     private fun failureOnLoggingInState() {
         uiState = LoginUiState(loginFailed = true)
+    }
+
+    fun validateEmail(email: String) {
+        if (uiState.emailIsInvalid && EmailValidator.isEmail(email))
+            validEmailState()
+    }
+
+    private fun validEmailState() {
+        uiState = uiState.copy(emailIsInvalid = false)
+    }
+
+    fun updateSubmitButtonStateBasedOn(email: String, password: String) {
+        uiState = uiState.copy(submitButtonIsEnabled = email.isNotBlank() && password.isNotBlank())
     }
 
     fun hideLoginFailureDialog() {

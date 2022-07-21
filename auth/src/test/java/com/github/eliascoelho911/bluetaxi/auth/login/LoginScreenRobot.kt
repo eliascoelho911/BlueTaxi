@@ -1,49 +1,76 @@
 package com.github.eliascoelho911.bluetaxi.auth.login
 
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import com.github.eliascoelho911.bluetaxi.core.test.ComposeTestRobot
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import com.github.eliascoelho911.bluetaxi.auth.R
+import com.github.eliascoelho911.bluetaxi.auth.login.LoginScreenTestTags.LoginFailedDialog
+import com.github.eliascoelho911.bluetaxi.core.test.BaseRobotScreen
 import com.github.eliascoelho911.bluetaxi.core.test.assertHasError
 import com.github.eliascoelho911.bluetaxi.core.test.assertHasNoError
 
-class LoginScreenRobot(
-    composeTestRule: ComposeContentTestRule,
-) : ComposeTestRobot(composeTestRule) {
+internal fun LoginScreenTest.loginScreenRobot(
+    block: LoginScreenRobot.() -> Unit,
+) {
+    LoginScreenRobot(this).apply(block)
+}
 
-    fun assertInvalidEmailAlertIsDisplayed() = apply {
+internal class LoginScreenRobot(
+    loginScreenTest: LoginScreenTest,
+) : BaseRobotScreen(loginScreenTest.composeTestRule) {
+
+    fun assertInvalidEmailAlertIsDisplayed() {
         withRule {
             onEmailTextFieldNode().assertHasError()
             onInvalidEmailAlertNode().assertIsDisplayed()
         }
     }
 
-    fun assertInvalidEmailAlertIsNotDisplayed() = apply {
+    fun assertInvalidEmailAlertIsNotDisplayed() {
         withRule {
             onEmailTextFieldNode().assertHasNoError()
             onInvalidEmailAlertNode().assertDoesNotExist()
         }
     }
 
-    fun assertLoginFailureDialogIsDisplayed() = apply {
+    fun assertLoginFailureDialogIsDisplayed() {
         withRule {
             onLoginFailedDialogNode().assertIsDisplayed()
         }
     }
 
-    fun assertLoginFailureDialogIsNotDisplayed() = apply {
+    fun assertLoginFailureDialogIsNotDisplayed() {
         withRule {
             onLoginFailedDialogNode().assertDoesNotExist()
         }
     }
 
+    fun assertSubmitButtonIsEnabled() {
+        withRule {
+            onSubmitButtonNode().assertIsEnabled()
+        }
+    }
+
+    fun assertSubmitButtonIsNotEnabled() {
+        withRule {
+            onSubmitButtonNode().assertIsNotEnabled()
+        }
+    }
+
+    private fun ComposeContentTestRule.onSubmitButtonNode() =
+        onNode(hasText(getString(R.string.login_submit)).and(hasClickAction()))
+
     private fun ComposeContentTestRule.onLoginFailedDialogNode() =
-        onNode(hasTestTag(LoginScreenTestTags.LOGIN_FAILED_DIALOG))
+        onNodeWithTag(LoginFailedDialog)
 
     private fun ComposeContentTestRule.onEmailTextFieldNode() =
-        onNode(hasText("Email"))
+        onNodeWithText(getString(R.string.email))
 
     private fun ComposeContentTestRule.onInvalidEmailAlertNode() =
-        onNode(hasTestTag(LoginScreenTestTags.INVALID_EMAIL_ALERT))
+        onNodeWithText(getString(R.string.invalid_email_error))
 }

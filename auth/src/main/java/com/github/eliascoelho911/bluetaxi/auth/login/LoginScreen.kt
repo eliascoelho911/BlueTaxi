@@ -15,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -27,6 +26,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -34,7 +34,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.core.ScreenRoute
@@ -42,7 +41,6 @@ import com.github.eliascoelho911.bluetaxi.designsystem.components.PasswordTextFi
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButton
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
-import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
 import kotlinx.coroutines.launch
 
 object LoginScreenRoute : ScreenRoute {
@@ -65,12 +63,14 @@ internal fun LoginScreen(loginViewModel: LoginViewModel) {
         password = password,
         onEmailChange = {
             email = it
-            if (uiState.emailIsInvalid) {
-                loginViewModel.validateEmail(email)
+            with(loginViewModel) {
+                validateEmail(email)
+                updateSubmitButtonStateBasedOn(email, password)
             }
         },
         onPasswordChange = {
             password = it
+            loginViewModel.updateSubmitButtonStateBasedOn(email, password)
         },
         onClickSubmit = {
             coroutineScope.launch {
@@ -127,7 +127,7 @@ fun LoginScreenContent(
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
                 onClick = onClickSubmit,
-                enabled = email.isNotBlank() && password.isNotBlank())
+                enabled = uiState.submitButtonIsEnabled)
 
             TextButton(onClick = { /*TODO*/ },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -149,6 +149,7 @@ fun LoginScreenContent(
 
         if (uiState.loginFailed) {
             AlertDialog(
+                modifier = Modifier.testTag(LoginScreenTestTags.LoginFailedDialog),
                 onDismissRequest = onDismissLoginFailureDialog,
                 text = { Text(text = stringResource(id = R.string.login_failure)) },
                 confirmButton = {
@@ -177,7 +178,7 @@ private fun SubmitButton(
                 contentDescription = stringResource(id = R.string.cd_login_success))
         },
     ) {
-        Text(text = stringResource(id = R.string.login))
+        Text(text = stringResource(id = R.string.login_submit))
     }
 }
 
@@ -198,7 +199,7 @@ private fun EmailTextField(
             isError = emailIsInvalid)
 
         if (emailIsInvalid)
-            Text(text = stringResource(id = R.string.email_error),
+            Text(text = stringResource(id = R.string.invalid_email_error),
                 modifier = Modifier.padding(start = 16.dp, top = 8.dp),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error)
@@ -218,3 +219,7 @@ private val TextButtonSecondaryContentColor
     @Composable get() = ButtonDefaults.textButtonColors(
         contentColor = MaterialTheme.colorScheme.onSurfaceVariant
     )
+
+object LoginScreenTestTags {
+    const val LoginFailedDialog = "LoginFailedDialog"
+}
