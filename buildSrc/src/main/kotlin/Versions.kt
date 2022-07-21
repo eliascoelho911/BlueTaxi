@@ -12,6 +12,7 @@ object Versions {
         const val constraintLayout = "1.1.3"
         const val material = "1.1.0"
         const val testRunner = "1.1.1"
+        const val testRules = "1.4.0"
         const val espresso = "3.1.1"
         const val junitExt = "1.1.1"
         const val lifecycle = "2.5.0"
@@ -30,7 +31,7 @@ object Versions {
     }
 
     object JUnit {
-        const val junit = "4.12"
+        const val junit = "4.13"
     }
 
     object Koin {

@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.DependencyHandlerScope
+import org.gradle.kotlin.dsl.project
 
 object TestDependencies {
 
@@ -17,6 +18,7 @@ object TestDependencies {
         const val espressoCore = "androidx.test.espresso:espresso-core:${Versions.Android.espresso}"
         const val junitExt = "androidx.test.ext:junit:${Versions.Android.junitExt}"
         const val coreKtx = "androidx.test:core-ktx:${Versions.Android.coreKtx}"
+        const val rules = "androidx.test:rules:${Versions.Android.testRules}"
         const val fragmentTesting =
             "androidx.fragment:fragment-testing:${Versions.Android.fragmentTesting}"
     }
@@ -55,19 +57,14 @@ fun DependencyHandlerScope.test() {
     "testImplementation"(TestDependencies.Android.coreTesting)
     "testImplementation"(TestDependencies.Kotlin.coroutinesTest)
     "testImplementation"(TestDependencies.Android.runner)
-    "testImplementation"(TestDependencies.OkHttp3.mockWebServer)
     "testImplementation"(TestDependencies.MockK.mockK)
     "testImplementation"(TestDependencies.Koin.koinTest)
     "testImplementation"(TestDependencies.Koin.koinTestJunit4)
     "testImplementation"(TestDependencies.Compose.junit4)
+    "testImplementation"(TestDependencies.Android.rules)
+    "testImplementation"(project(":core:test"))
     "debugImplementation"(TestDependencies.Android.fragmentTesting)
-    "androidTestImplementation"(TestDependencies.OkHttp3.mockWebServer)
-    "androidTestImplementation"(TestDependencies.Android.espressoCore)
     "androidTestImplementation"(TestDependencies.Android.runner)
-    "androidTestImplementation"(TestDependencies.Android.junitExt)
-    "androidTestImplementation"(TestDependencies.Android.coreKtx)
-    "androidTestImplementation"(TestDependencies.Android.coreTesting)
     "androidTestImplementation"(TestDependencies.MockK.android)
     "androidTestImplementation"(TestDependencies.Robolectric.annotations)
-    "androidTestImplementation"(TestDependencies.Compose.junit4)
 }
