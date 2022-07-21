@@ -25,14 +25,14 @@ internal class LoginViewModel : ViewModel() {
         if (!emailIsValid) {
             invalidEmailState()
         } else {
-            uiState = uiState.copy(invalidEmailErrorIsVisible = false)
+            uiState = uiState.copy(emailIsInvalid = false)
         }
 
         return emailIsValid
     }
 
     private fun invalidEmailState() {
-        uiState = LoginUiState(invalidEmailErrorIsVisible = true)
+        uiState = LoginUiState(emailIsInvalid = true)
     }
 
     private fun loadingLogin() {
@@ -44,10 +44,10 @@ internal class LoginViewModel : ViewModel() {
     }
 
     private fun failureOnLoggingInState() {
-        uiState = LoginUiState(loginFailureDialogIsVisible = true)
+        uiState = LoginUiState(loginFailed = true)
     }
 
     fun hideLoginFailureDialog() {
-        uiState = uiState.copy(loginFailureDialogIsVisible = false)
+        uiState = uiState.copy(loginFailed = false)
     }
 }

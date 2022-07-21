@@ -52,118 +52,116 @@ object LoginScreenRoute : ScreenRoute {
 //todo testar cenário de erro
 //todo testar cenário de sucesso
 //todo implementar e testar cenáro de email/senha em branco
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoginScreen(loginViewModel: LoginViewModel) {
-    Scaffold(topBar = { LoginTopAppBar { /*TODO*/ } }) { contentPadding ->
-        val coroutineScope = rememberCoroutineScope()
-        var email by remember { mutableStateOf(String()) }
-        var password by remember { mutableStateOf(String()) }
-        val uiState = loginViewModel.uiState
+    val coroutineScope = rememberCoroutineScope()
+    var email by remember { mutableStateOf(String()) }
+    var password by remember { mutableStateOf(String()) }
+    val uiState = loginViewModel.uiState
 
-        LoginScreenContent(
-            modifier = Modifier.padding(contentPadding),
-            uiState = uiState,
-            email = email,
-            password = password,
-            onEmailChange = {
-                email = it
-                if (uiState.invalidEmailErrorIsVisible) {
-                    loginViewModel.validateEmail(email)
-                }
-            },
-            onPasswordChange = {
-                password = it
-            },
-            onClickEnter = {
-                coroutineScope.launch {
-                    loginViewModel.login(email, password)
-                }
-            },
-            onDismissLoginFailureDialog = {
-                loginViewModel.hideLoginFailureDialog()
+    LoginScreenContent(
+        uiState = uiState,
+        email = email,
+        password = password,
+        onEmailChange = {
+            email = it
+            if (uiState.emailIsInvalid) {
+                loginViewModel.validateEmail(email)
             }
-        )
-    }
+        },
+        onPasswordChange = {
+            password = it
+        },
+        onClickSubmit = {
+            coroutineScope.launch {
+                loginViewModel.login(email, password)
+            }
+        },
+        onDismissLoginFailureDialog = {
+            loginViewModel.hideLoginFailureDialog()
+        }
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoginScreenContent(
-    modifier: Modifier = Modifier,
+fun LoginScreenContent(
     uiState: LoginUiState,
-    email: String = String(),
-    password: String = String(),
-    onEmailChange: (String) -> Unit = {},
-    onPasswordChange: (String) -> Unit = {},
-    onClickEnter: () -> Unit = {},
-    onDismissLoginFailureDialog: () -> Unit = {},
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onClickSubmit: () -> Unit,
+    onDismissLoginFailureDialog: () -> Unit,
 ) {
-    Column(modifier = modifier) {
-        Text(modifier = Modifier.padding(horizontal = ScreenPadding),
-            text = stringResource(id = R.string.login_subtitle),
-            style = MaterialTheme.typography.bodyLarge)
+    Scaffold(topBar = { LoginTopAppBar { /*TODO*/ } }) { contentPadding ->
+        Column(modifier = Modifier.padding(contentPadding)) {
+            Text(modifier = Modifier.padding(horizontal = ScreenPadding),
+                text = stringResource(id = R.string.login_subtitle),
+                style = MaterialTheme.typography.bodyLarge)
 
-        Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-        EmailTextField(
-            email,
-            onEmailChange = onEmailChange,
-            emailIsInvalid = uiState.invalidEmailErrorIsVisible,
-            modifier = Modifier.padding(horizontal = ScreenPadding)
-        )
+            EmailTextField(
+                email,
+                onEmailChange = onEmailChange,
+                emailIsInvalid = uiState.emailIsInvalid,
+                modifier = Modifier.padding(horizontal = ScreenPadding)
+            )
 
-        Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(24.dp))
 
-        PasswordTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = ScreenPadding),
-            value = password,
-            onValueChange = onPasswordChange,
-            label = { Text(text = stringResource(id = R.string.password)) }
-        )
+            PasswordTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ScreenPadding),
+                value = password,
+                onValueChange = onPasswordChange,
+                label = { Text(text = stringResource(id = R.string.password)) }
+            )
 
-        EnterButton(uiState.loginButtonState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = ScreenPadding)
-                .padding(top = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            onClick = onClickEnter,
-            enabled = email.isNotBlank() && password.isNotBlank())
+            SubmitButton(uiState.loginButtonState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = ScreenPadding)
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = onClickSubmit,
+                enabled = email.isNotBlank() && password.isNotBlank())
 
-        TextButton(onClick = { /*TODO*/ },
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            colors = TextButtonSecondaryContentColor
-        ) {
-            Text(text = buildAnnotatedString {
-                append(stringResource(id = R.string.dont_have_account))
-                append(" ")
+            TextButton(onClick = { /*TODO*/ },
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                colors = TextButtonSecondaryContentColor
+            ) {
+                Text(text = buildAnnotatedString {
+                    append(stringResource(id = R.string.dont_have_account))
+                    append(" ")
 
-                withStyle(style = SpanStyle(
-                    textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold
-                )) {
-                    append(stringResource(id = R.string.registration))
-                }
-            })
+                    withStyle(style = SpanStyle(
+                        textDecoration = TextDecoration.Underline,
+                        fontWeight = FontWeight.Bold
+                    )) {
+                        append(stringResource(id = R.string.registration))
+                    }
+                })
+            }
+        }
+
+        if (uiState.loginFailed) {
+            AlertDialog(
+                onDismissRequest = onDismissLoginFailureDialog,
+                text = { Text(text = stringResource(id = R.string.login_failure)) },
+                confirmButton = {
+                    TextButton(onClick = onDismissLoginFailureDialog) {
+                        Text(text = stringResource(id = android.R.string.ok))
+                    }
+                })
         }
     }
-
-    if (uiState.loginFailureDialogIsVisible) {
-        AlertDialog(
-            onDismissRequest = onDismissLoginFailureDialog,
-            text = { Text(text = stringResource(id = R.string.login_failure)) },
-            confirmButton = {
-                TextButton(onClick = onDismissLoginFailureDialog) {
-                    Text(text = stringResource(id = android.R.string.ok))
-                }
-            })
-    }
 }
 
 @Composable
-private fun EnterButton(
+private fun SubmitButton(
     loginButtonState: ProgressButtonState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -214,121 +212,9 @@ private fun LoginTopAppBar(onNavigationBack: () -> Unit) {
         navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) })
 }
 
-
 private val ScreenPadding = 16.dp
 
 private val TextButtonSecondaryContentColor
-    @Composable get() =
-        ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onSurfaceVariant)
-
-@Preview("Login - Dark")
-@Composable
-private fun LoginScreenDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreen(LoginViewModel())
-    }
-}
-
-@Preview("Email invalid - Dark")
-@Composable
-private fun EmailInvalidDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(invalidEmailErrorIsVisible = true),
-            )
-        }
-    }
-}
-
-@Preview("Loading logging in - Dark")
-@Composable
-private fun LoadingLoggingInDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING),
-            )
-        }
-    }
-}
-
-@Preview("Success on logging in - Dark")
-@Composable
-private fun SuccessLoggingInDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS),
-            )
-        }
-    }
-}
-
-@Preview("Failure on logging in - Dark")
-@Composable
-private fun FailureLoggingInDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginFailureDialogIsVisible = true),
-            )
-        }
-    }
-}
-
-@Preview("Login - Light")
-@Composable
-private fun LoginScreenLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreen(LoginViewModel())
-    }
-}
-
-@Preview("Email invalid - Light", showBackground = true)
-@Composable
-private fun EmailInvalidLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(invalidEmailErrorIsVisible = true),
-            )
-        }
-    }
-}
-
-@Preview("Loading logging in - Light", showBackground = true)
-@Composable
-private fun LoadingLoggingInLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING),
-            )
-        }
-    }
-}
-
-@Preview("Success on logging in - Light", showBackground = true)
-@Composable
-private fun SuccessLoggingInLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS),
-            )
-        }
-    }
-}
-
-@Preview("Failure on logging in - Light", showBackground = true)
-@Composable
-private fun FailureLoggingInLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        Surface(color = MaterialTheme.colorScheme.background) {
-            LoginScreenContent(
-                uiState = LoginUiState(loginFailureDialogIsVisible = true),
-            )
-        }
-    }
-}
+    @Composable get() = ButtonDefaults.textButtonColors(
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+    )
