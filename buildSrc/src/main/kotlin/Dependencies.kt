@@ -31,6 +31,7 @@ object Dependencies {
 
     object Accompanist {
         const val navigationAnimation = "com.google.accompanist:accompanist-navigation-animation:${Versions.Accompanist.navigationAnimation}"
+        const val systemuicontroller = "com.google.accompanist:accompanist-systemuicontroller:${Versions.Accompanist.navigationAnimation}"
     }
 
     object Retrofit2 {
@@ -75,6 +76,10 @@ fun DependencyHandlerScope.composeNavigation() {
 
 fun DependencyHandlerScope.composeNavigationAnimation() {
     "implementation"(Dependencies.Accompanist.navigationAnimation)
+}
+
+fun DependencyHandlerScope.systemUiController() {
+    "implementation"(Dependencies.Accompanist.systemuicontroller)
 }
 
 fun DependencyHandlerScope.activityCompose() {
