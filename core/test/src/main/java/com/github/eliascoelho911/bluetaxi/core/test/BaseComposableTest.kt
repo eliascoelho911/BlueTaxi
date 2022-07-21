@@ -1,9 +1,14 @@
 package com.github.eliascoelho911.bluetaxi.core.test
 
+import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import org.junit.Rule
 
 abstract class BaseComposableTest {
     @get:Rule
-    protected val composeTestRule = createComposeRule()
+    val composeTestRule = createComposeRule()
+
+    fun test(block: ComposeContentTestRule.() -> Unit) {
+        composeTestRule.block()
+    }
 }

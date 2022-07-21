@@ -63,3 +63,7 @@ android {
         kotlinCompilerExtensionVersion = Versions.Compose.compose
     }
 }
+
+tasks.withType(Test::class) {
+    systemProperties["robolectric.logging"] = "stdout"
+}
