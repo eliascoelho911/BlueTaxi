@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.github.eliascoelho911.bluetaxi.core.commons.EmailValidator
+import com.github.eliascoelho911.bluetaxi.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import kotlinx.coroutines.delay
 
@@ -12,9 +12,11 @@ internal class LoginViewModel : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
 
-    suspend fun login(email: String, password: String) {
-        if (!EmailValidator.isEmail(email))
+    suspend fun submit(email: String, password: String) {
+        if (!EmailValidator.isEmail(email)) {
             invalidEmailState()
+            return
+        }
 
         loadingLogin()
         delay(2000)
@@ -22,7 +24,7 @@ internal class LoginViewModel : ViewModel() {
     }
 
     private fun invalidEmailState() {
-        uiState = LoginUiState(emailIsInvalid = true)
+        uiState = LoginUiState(emailIsInvalid = true, submitButtonIsEnabled = false)
     }
 
     private fun loadingLogin() {
@@ -47,7 +49,8 @@ internal class LoginViewModel : ViewModel() {
     }
 
     fun updateSubmitButtonStateBasedOn(email: String, password: String) {
-        uiState = uiState.copy(submitButtonIsEnabled = email.isNotBlank() && password.isNotBlank())
+        if (!uiState.emailIsInvalid)
+            uiState = uiState.copy(submitButtonIsEnabled = email.isNotBlank() && password.isNotBlank())
     }
 
     fun hideLoginFailureDialog() {

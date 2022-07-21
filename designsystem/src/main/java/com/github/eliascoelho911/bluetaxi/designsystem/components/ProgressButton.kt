@@ -64,7 +64,7 @@ fun ProgressButton(
             if (state == ProgressButtonState.CONTENT) onClick()
         },
         modifier = modifier,
-        enabled = enabled,
+        enabled = if (state == ProgressButtonState.CONTENT) enabled else false,
         interactionSource = interactionSource,
         elevation = elevation,
         shape = shape,

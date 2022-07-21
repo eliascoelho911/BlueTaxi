@@ -21,6 +21,7 @@ object Dependencies {
 
     object Koin {
         const val android = "io.insert-koin:koin-android:${Versions.Koin.koin}"
+        const val compose = "io.insert-koin:koin-androidx-compose:${Versions.Koin.koin}"
         const val core = "io.insert-koin:koin-core:${Versions.Koin.koin}"
     }
 
@@ -61,17 +62,18 @@ fun DependencyHandlerScope.constraintLayoutCompose() {
 fun DependencyHandlerScope.koin() {
     "implementation"(Dependencies.Koin.core)
     "implementation"(Dependencies.Koin.android)
+    "implementation"(Dependencies.Koin.compose)
 }
 
 fun DependencyHandlerScope.appCompat() {
     "implementation"(Dependencies.Android.appCompat)
 }
 
-fun DependencyHandlerScope.navigationCompose() {
+fun DependencyHandlerScope.composeNavigation() {
     "implementation"(Dependencies.Compose.navigation)
 }
 
-fun DependencyHandlerScope.navigationAnimation() {
+fun DependencyHandlerScope.composeNavigationAnimation() {
     "implementation"(Dependencies.Accompanist.navigationAnimation)
 }
 

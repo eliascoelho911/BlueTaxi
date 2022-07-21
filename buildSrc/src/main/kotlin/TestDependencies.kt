@@ -62,7 +62,7 @@ fun DependencyHandlerScope.test() {
     "testImplementation"(TestDependencies.Koin.koinTestJunit4)
     "testImplementation"(TestDependencies.Compose.junit4)
     "testImplementation"(TestDependencies.Android.rules)
-    "testImplementation"(project(":core:test"))
+    "testImplementation"(project(":commons:test"))
     "debugImplementation"(TestDependencies.Android.fragmentTesting)
     "androidTestImplementation"(TestDependencies.Android.runner)
     "androidTestImplementation"(TestDependencies.MockK.android)

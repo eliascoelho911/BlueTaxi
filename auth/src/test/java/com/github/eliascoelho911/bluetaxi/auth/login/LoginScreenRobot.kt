@@ -10,9 +10,9 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.auth.login.LoginScreenTestTags.LoginFailedDialog
-import com.github.eliascoelho911.bluetaxi.core.test.BaseRobotScreen
-import com.github.eliascoelho911.bluetaxi.core.test.assertHasError
-import com.github.eliascoelho911.bluetaxi.core.test.assertHasNoError
+import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
+import com.github.eliascoelho911.bluetaxi.commons.test.assertHasError
+import com.github.eliascoelho911.bluetaxi.commons.test.assertHasNoError
 
 internal fun LoginScreenTest.loginScreenRobot(
     block: LoginScreenRobot.() -> Unit,

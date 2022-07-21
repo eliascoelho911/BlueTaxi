@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,28 +37,26 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.github.eliascoelho911.bluetaxi.auth.R
-import com.github.eliascoelho911.bluetaxi.core.ScreenRoute
 import com.github.eliascoelho911.bluetaxi.designsystem.components.PasswordTextField
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButton
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.getViewModel
 
-object LoginScreenRoute : ScreenRoute {
-    override val route = "login"
-}
-
-//todo testar cenário de erro
-//todo testar cenário de sucesso
-//todo implementar e testar cenáro de email/senha em branco
 @Composable
-internal fun LoginScreen(loginViewModel: LoginViewModel) {
+fun LoginScreen() {
+    val loginViewModel = getViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
     var email by remember { mutableStateOf(String()) }
     var password by remember { mutableStateOf(String()) }
     val uiState = loginViewModel.uiState
 
-    LoginScreenContent(
+    LaunchedEffect(Unit) {
+        loginViewModel.updateSubmitButtonStateBasedOn(email, password)
+    }
+
+    LoginScreen(
         uiState = uiState,
         email = email,
         password = password,
@@ -74,7 +73,7 @@ internal fun LoginScreen(loginViewModel: LoginViewModel) {
         },
         onClickSubmit = {
             coroutineScope.launch {
-                loginViewModel.login(email, password)
+                loginViewModel.submit(email, password)
             }
         },
         onDismissLoginFailureDialog = {
@@ -85,7 +84,7 @@ internal fun LoginScreen(loginViewModel: LoginViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreenContent(
+internal fun LoginScreen(
     uiState: LoginUiState,
     email: String,
     password: String,
@@ -162,24 +161,10 @@ fun LoginScreenContent(
 }
 
 @Composable
-private fun SubmitButton(
-    loginButtonState: ProgressButtonState,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = false,
-) {
-    ProgressButton(
-        onClick = onClick,
-        modifier = modifier,
-        state = loginButtonState,
-        enabled = enabled,
-        successContent = {
-            Icon(imageVector = Icons.Rounded.Done,
-                contentDescription = stringResource(id = R.string.cd_login_success))
-        },
-    ) {
-        Text(text = stringResource(id = R.string.login_submit))
-    }
+private fun LoginTopAppBar(onNavigationBack: () -> Unit) {
+    LargeTopAppBar(
+        title = { Text(text = stringResource(id = R.string.login_title)) },
+        navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) })
 }
 
 @Composable
@@ -207,10 +192,24 @@ private fun EmailTextField(
 }
 
 @Composable
-private fun LoginTopAppBar(onNavigationBack: () -> Unit) {
-    LargeTopAppBar(
-        title = { Text(text = stringResource(id = R.string.login_title)) },
-        navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) })
+private fun SubmitButton(
+    loginButtonState: ProgressButtonState,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = false,
+) {
+    ProgressButton(
+        onClick = onClick,
+        modifier = modifier,
+        state = loginButtonState,
+        enabled = enabled,
+        successContent = {
+            Icon(imageVector = Icons.Rounded.Done,
+                contentDescription = stringResource(id = R.string.cd_login_success))
+        },
+    ) {
+        Text(text = stringResource(id = R.string.login_submit))
+    }
 }
 
 private val ScreenPadding = 16.dp

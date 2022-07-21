@@ -9,12 +9,7 @@ android {
 }
 
 dependencies {
-    appCompat()
-    compose()
     koin()
-
-    test()
-
-    commonsModule()
-    designSystemModule()
+    implementation(TestDependencies.JUnit.junit)
+    implementation(TestDependencies.Compose.junit4)
 }

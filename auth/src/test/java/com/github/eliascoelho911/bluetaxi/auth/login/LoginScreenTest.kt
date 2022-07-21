@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.eliascoelho911.bluetaxi.core.test.BaseComposableTest
+import com.github.eliascoelho911.bluetaxi.commons.test.BaseComposableTest
 import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,7 +18,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun whenEmailIsInvalid_mustDisplayInvalidEmailAlert() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(emailIsInvalid = true))
+                DefaultLoginScreen(LoginUiState(emailIsInvalid = true))
             }
         }
 
@@ -31,7 +31,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun whenEmailIsValid_mustNotDisplayInvalidEmailAlert() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(emailIsInvalid = false))
+                DefaultLoginScreen(LoginUiState(emailIsInvalid = false))
             }
         }
 
@@ -44,7 +44,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun whenLoginFailed_mustDisplayLoginFailureDialog() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(loginFailed = true))
+                DefaultLoginScreen(LoginUiState(loginFailed = true))
             }
         }
 
@@ -57,7 +57,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun whenLoginNotFailed_mustNotDisplayLoginFailureDialog() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(loginFailed = false))
+                DefaultLoginScreen(LoginUiState(loginFailed = false))
             }
         }
 
@@ -70,7 +70,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun submitButtonIsEnabledTest() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(submitButtonIsEnabled = true))
+                DefaultLoginScreen(LoginUiState(submitButtonIsEnabled = true))
             }
         }
 
@@ -83,7 +83,7 @@ class LoginScreenTest : BaseComposableTest() {
     fun submitButtonIsNotEnabledTest() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreenContent(LoginUiState(submitButtonIsEnabled = false))
+                DefaultLoginScreen(LoginUiState(submitButtonIsEnabled = false))
             }
         }
 
@@ -94,11 +94,11 @@ class LoginScreenTest : BaseComposableTest() {
 }
 
 @Composable
-private fun DefaultLoginScreenContent(uiState: LoginUiState) {
+private fun DefaultLoginScreen(uiState: LoginUiState) {
     var email by remember { mutableStateOf(String()) }
     var password by remember { mutableStateOf(String()) }
 
-    LoginScreenContent(
+    LoginScreen(
         uiState = uiState,
         email = email,
         password = password,

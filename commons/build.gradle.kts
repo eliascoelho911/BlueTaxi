@@ -9,12 +9,8 @@ android {
 }
 
 dependencies {
-    appCompat()
     compose()
-    koin()
+    composeNavigationAnimation()
 
     test()
-
-    commonsModule()
-    designSystemModule()
 }

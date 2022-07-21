@@ -6,5 +6,5 @@ data class LoginUiState(
     val emailIsInvalid: Boolean = false,
     val loginButtonState: ProgressButtonState = ProgressButtonState.CONTENT,
     val loginFailed: Boolean = false,
-    val submitButtonIsEnabled: Boolean = true
+    val submitButtonIsEnabled: Boolean = false
 )

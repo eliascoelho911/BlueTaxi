@@ -5,8 +5,8 @@ fun DependencyHandlerScope.designSystemModule() {
     "implementation"(project(":designsystem"))
 }
 
-fun DependencyHandlerScope.coreModule() {
-    "implementation"(project(":core"))
+fun DependencyHandlerScope.commonsModule() {
+    "implementation"(project(":commons"))
 }
 
 fun DependencyHandlerScope.authModule() {

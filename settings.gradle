@@ -9,5 +9,5 @@ rootProject.name = "BlueTaxi"
 include ':app'
 include ':auth'
 include ':designsystem'
-include ':core'
-include ':core:test'
+include ':commons'
+include ':commons:test'

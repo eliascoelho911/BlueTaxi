@@ -16,15 +16,20 @@ android {
                 "proguard-rules.pro")
         }
     }
+
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
     koin()
     appCompat()
-    navigationAnimation()
+    composeNavigationAnimation()
     activityCompose()
-    
+    compose()
+
     designSystemModule()
-    coreModule()
     authModule()
+    commonsModule()
 }

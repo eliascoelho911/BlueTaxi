@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @Composable
 private fun EmailInvalidDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
     }
 }
 
@@ -24,7 +24,7 @@ private fun EmailInvalidDarkPreview() {
 @Composable
 private fun SuccessLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
     }
 }
 
@@ -32,7 +32,7 @@ private fun SuccessLoggingInDarkPreview() {
 @Composable
 private fun FailureLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
             loginButtonState = ProgressButtonState.CONTENT,
             loginFailed = true))
     }
@@ -42,7 +42,7 @@ private fun FailureLoggingInDarkPreview() {
 @Composable
 private fun EmailInvalidLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
     }
 }
 
@@ -50,7 +50,7 @@ private fun EmailInvalidLightPreview() {
 @Composable
 private fun SuccessLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
     }
 }
 
@@ -58,7 +58,7 @@ private fun SuccessLoggingInLightPreview() {
 @Composable
 private fun FailureLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenContentPreview(targetUiStateOnSubmit = LoginUiState(
+        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
             loginButtonState = ProgressButtonState.CONTENT,
             loginFailed = true))
     }
@@ -66,10 +66,10 @@ private fun FailureLoggingInLightPreview() {
 
 
 @Composable
-private fun LoginScreenContentPreview(targetUiStateOnSubmit: LoginUiState) {
+private fun LoginScreenPreview(targetUiStateOnSubmit: LoginUiState) {
     var uiState by remember { mutableStateOf(LoginUiState()) }
     val coroutineScope = rememberCoroutineScope()
-    LoginScreenContentPreview(
+    LoginScreenPreview(
         uiState = uiState,
         onClickSubmit = {
             coroutineScope.launch {
@@ -85,7 +85,7 @@ private fun LoginScreenContentPreview(targetUiStateOnSubmit: LoginUiState) {
 }
 
 @Composable
-private fun LoginScreenContentPreview(
+private fun LoginScreenPreview(
     uiState: LoginUiState,
     onClickSubmit: () -> Unit,
     onDismissLoginFailureDialog: () -> Unit,
@@ -93,7 +93,7 @@ private fun LoginScreenContentPreview(
     var email by remember { mutableStateOf(String()) }
     var password by remember { mutableStateOf(String()) }
 
-    LoginScreenContent(uiState = uiState,
+    LoginScreen(uiState = uiState,
         email = email,
         password = password,
         onEmailChange = { email = it },
