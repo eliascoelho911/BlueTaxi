@@ -1,5 +1,6 @@
 package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -27,8 +28,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,19 +49,32 @@ import com.github.eliascoelho911.bluetaxi.designsystem.components.PasswordTextFi
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButton
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
+private const val DelayToFinishLogin = 2000L
+
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onUserLogIn: () -> Unit,
+) {
     val loginViewModel = getViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
     var email by rememberSaveable { mutableStateOf(String()) }
     var password by rememberSaveable { mutableStateOf(String()) }
     val uiState = loginViewModel.uiState
+    val currentOnUserLogIn by rememberUpdatedState(onUserLogIn)
 
     LaunchedEffect(Unit) {
-        loginViewModel.updateSubmitButtonStateBasedOn(email, password)
+        loginViewModel.validateIfCanLogIn(email, password)
+    }
+
+    LaunchedEffect(uiState) {
+        if (uiState.isUserLoggedIn) {
+            delay(DelayToFinishLogin)
+            currentOnUserLogIn()
+        }
     }
 
     LoginScreen(
@@ -70,21 +84,21 @@ fun LoginScreen() {
         onEmailChange = {
             email = it
             with(loginViewModel) {
-                validateEmail(email)
-                updateSubmitButtonStateBasedOn(email, password)
+                validateEmailHasBeenCorrected(email)
+                validateIfCanLogIn(email, password)
             }
         },
         onPasswordChange = {
             password = it
-            loginViewModel.updateSubmitButtonStateBasedOn(email, password)
+            loginViewModel.validateIfCanLogIn(email, password)
         },
         onClickSubmit = {
             coroutineScope.launch {
-                loginViewModel.submit(email, password)
+                loginViewModel.logIn(email, password)
             }
         },
-        onDismissLoginFailureDialog = {
-            loginViewModel.hideLoginFailureDialog()
+        onDismissErrorDialog = {
+            loginViewModel.errorMessageShown()
         }
     )
 }
@@ -98,7 +112,7 @@ internal fun LoginScreen(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onClickSubmit: () -> Unit,
-    onDismissLoginFailureDialog: () -> Unit,
+    onDismissErrorDialog: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarScrollState())
     Scaffold(
@@ -139,7 +153,7 @@ internal fun LoginScreen(
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
                 onClick = onClickSubmit,
-                enabled = uiState.submitButtonIsEnabled)
+                enabled = uiState.canLogIn)
 
             TextButton(onClick = { /*TODO*/ },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -159,17 +173,8 @@ internal fun LoginScreen(
             }
         }
 
-        if (uiState.loginFailed) {
-            AlertDialog(
-                modifier = Modifier.testTag(LoginScreenTestTags.LoginFailedDialog),
-                onDismissRequest = onDismissLoginFailureDialog,
-                text = { Text(text = stringResource(id = R.string.login_failure)) },
-                confirmButton = {
-                    TextButton(onClick = onDismissLoginFailureDialog) {
-                        Text(text = stringResource(id = android.R.string.ok))
-                    }
-                })
-        }
+        if (uiState.errorMessage != null) ShowErrorDialog(uiState.errorMessage,
+            onDismissErrorDialog)
     }
 }
 
@@ -226,6 +231,19 @@ private fun SubmitButton(
     }
 }
 
+@Composable
+private fun ShowErrorDialog(@StringRes messageRes: Int, onDismissErrorDialog: () -> Unit) {
+    AlertDialog(
+        modifier = Modifier.testTag(LoginScreenTestTags.ErrorDialog),
+        onDismissRequest = onDismissErrorDialog,
+        text = { Text(text = stringResource(id = messageRes)) },
+        confirmButton = {
+            TextButton(onClick = onDismissErrorDialog) {
+                Text(text = stringResource(id = android.R.string.ok))
+            }
+        })
+}
+
 private val ScreenPadding = 16.dp
 
 private val TextButtonSecondaryContentColor
@@ -234,5 +252,5 @@ private val TextButtonSecondaryContentColor
     )
 
 object LoginScreenTestTags {
-    const val LoginFailedDialog = "LoginFailedDialog"
+    const val ErrorDialog = "ErrorDialog"
 }

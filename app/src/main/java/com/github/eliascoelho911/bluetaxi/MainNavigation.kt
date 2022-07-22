@@ -3,6 +3,7 @@ package com.github.eliascoelho911.bluetaxi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.github.eliascoelho911.bluetaxi.auth.ui.login.LoginScreen
 import com.github.eliascoelho911.bluetaxi.commons.BlueTaxiState
@@ -40,6 +41,8 @@ private fun NavGraphBuilder.addAuthNavigation() {
 @OptIn(ExperimentalAnimationApi::class)
 private fun NavGraphBuilder.addLoginScreen() {
     composable(Screen.Login.route) {
-        LoginScreen()
+        LoginScreen(onUserLogIn = {
+
+        })
     }
 }

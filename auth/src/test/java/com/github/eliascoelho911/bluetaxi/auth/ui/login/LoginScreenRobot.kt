@@ -9,7 +9,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.github.eliascoelho911.bluetaxi.auth.R
-import com.github.eliascoelho911.bluetaxi.auth.ui.login.LoginScreenTestTags.LoginFailedDialog
+import com.github.eliascoelho911.bluetaxi.auth.ui.login.LoginScreenTestTags.ErrorDialog
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasError
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasNoError
@@ -38,35 +38,35 @@ internal class LoginScreenRobot(
         }
     }
 
-    fun assertLoginFailureDialogIsDisplayed() {
+    fun assertErrorDialogIsDisplayed() {
         withRule {
-            onLoginFailedDialogNode().assertIsDisplayed()
+            onErrorDialogNode().assertIsDisplayed()
         }
     }
 
-    fun assertLoginFailureDialogIsNotDisplayed() {
+    fun assertErrorDialogIsNotDisplayed() {
         withRule {
-            onLoginFailedDialogNode().assertDoesNotExist()
+            onErrorDialogNode().assertDoesNotExist()
         }
     }
 
-    fun assertSubmitButtonIsEnabled() {
+    fun assertLogInButtonIsEnabled() {
         withRule {
-            onSubmitButtonNode().assertIsEnabled()
+            onLogInButtonNode().assertIsEnabled()
         }
     }
 
-    fun assertSubmitButtonIsNotEnabled() {
+    fun assertLogInButtonIsNotEnabled() {
         withRule {
-            onSubmitButtonNode().assertIsNotEnabled()
+            onLogInButtonNode().assertIsNotEnabled()
         }
     }
 
-    private fun ComposeContentTestRule.onSubmitButtonNode() =
+    private fun ComposeContentTestRule.onLogInButtonNode() =
         onNode(hasText(getString(R.string.login_submit)).and(hasClickAction()))
 
-    private fun ComposeContentTestRule.onLoginFailedDialogNode() =
-        onNodeWithTag(LoginFailedDialog)
+    private fun ComposeContentTestRule.onErrorDialogNode() =
+        onNodeWithTag(ErrorDialog)
 
     private fun ComposeContentTestRule.onEmailTextFieldNode() =
         onNodeWithText(getString(R.string.email))

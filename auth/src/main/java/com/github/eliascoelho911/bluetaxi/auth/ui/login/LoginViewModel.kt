@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.auth.domain.usecases.LoginUseCase
 import com.github.eliascoelho911.bluetaxi.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
@@ -13,51 +14,51 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
     var uiState by mutableStateOf(LoginUiState())
         private set
 
-    suspend fun submit(email: String, password: String) {
+    suspend fun logIn(email: String, password: String) {
         if (!EmailValidator.isEmail(email)) {
-            invalidEmailState()
+            invalidEmail()
             return
         }
 
-        loadingLogin()
+        loggingIn()
 
         delay(2000)
 
-        val successfullyLoggedIn = loginUseCase(email, password)
-        if (successfullyLoggedIn) successOnLoggingInState() else failureOnLoggingInState()
+        val isSuccessfullyLoggedIn = loginUseCase(email, password)
+        if (isSuccessfullyLoggedIn) successfullyLoggedIn() else failedToLogin()
     }
 
-    private fun invalidEmailState() {
-        uiState = LoginUiState(emailIsInvalid = true, submitButtonIsEnabled = false)
+    private fun invalidEmail() {
+        uiState = LoginUiState(emailIsInvalid = true, canLogIn = false)
     }
 
-    private fun loadingLogin() {
+    private fun loggingIn() {
         uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING)
     }
 
-    private fun successOnLoggingInState() {
-        uiState = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS)
+    private fun successfullyLoggedIn() {
+        uiState = uiState.copy(loginButtonState = ProgressButtonState.SUCCESS, isUserLoggedIn = true)
     }
 
-    private fun failureOnLoggingInState() {
-        uiState = LoginUiState(loginFailed = true)
+    private fun failedToLogin() {
+        uiState = LoginUiState(errorMessage = R.string.invalid_credentials_error)
     }
 
-    fun validateEmail(email: String) {
+    fun validateEmailHasBeenCorrected(email: String) {
         if (uiState.emailIsInvalid && EmailValidator.isEmail(email))
-            validEmailState()
+            validEmail()
     }
 
-    private fun validEmailState() {
+    private fun validEmail() {
         uiState = uiState.copy(emailIsInvalid = false)
     }
 
-    fun updateSubmitButtonStateBasedOn(email: String, password: String) {
+    fun validateIfCanLogIn(email: String, password: String) {
         if (!uiState.emailIsInvalid)
-            uiState = uiState.copy(submitButtonIsEnabled = email.isNotBlank() && password.isNotBlank())
+            uiState = uiState.copy(canLogIn = email.isNotBlank() && password.isNotBlank())
     }
 
-    fun hideLoginFailureDialog() {
-        uiState = uiState.copy(loginFailed = false)
+    fun errorMessageShown() {
+        uiState = uiState.copy(errorMessage = null)
     }
 }

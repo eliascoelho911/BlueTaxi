@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseComposableTest
 import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
 import org.junit.Test
@@ -41,54 +42,54 @@ class LoginScreenTest : BaseComposableTest() {
     }
 
     @Test
-    fun whenLoginFailed_mustDisplayLoginFailureDialog() = composableTest {
+    fun whenFailedToLogin_mustDisplayErrorDialog() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreen(LoginUiState(loginFailed = true))
+                DefaultLoginScreen(LoginUiState(errorMessage = R.string.invalid_credentials_error))
             }
         }
 
         loginScreenRobot {
-            assertLoginFailureDialogIsDisplayed()
+            assertErrorDialogIsDisplayed()
         }
     }
 
     @Test
-    fun whenLoginNotFailed_mustNotDisplayLoginFailureDialog() = composableTest {
+    fun whenSuccessfullyLoggedIn_mustNotDisplayErrorDialog() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreen(LoginUiState(loginFailed = false))
+                DefaultLoginScreen(LoginUiState(errorMessage = null))
             }
         }
 
         loginScreenRobot {
-            assertLoginFailureDialogIsNotDisplayed()
+            assertErrorDialogIsNotDisplayed()
         }
     }
 
     @Test
-    fun submitButtonIsEnabledTest() = composableTest {
+    fun logInButtonIsEnabledTest() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreen(LoginUiState(submitButtonIsEnabled = true))
+                DefaultLoginScreen(LoginUiState(canLogIn = true))
             }
         }
 
         loginScreenRobot {
-            assertSubmitButtonIsEnabled()
+            assertLogInButtonIsEnabled()
         }
     }
 
     @Test
-    fun submitButtonIsNotEnabledTest() = composableTest {
+    fun logInButtonIsNotEnabledTest() = composableTest {
         setContent {
             BlueTaxiTheme {
-                DefaultLoginScreen(LoginUiState(submitButtonIsEnabled = false))
+                DefaultLoginScreen(LoginUiState(canLogIn = false))
             }
         }
 
         loginScreenRobot {
-            assertSubmitButtonIsNotEnabled()
+            assertLogInButtonIsNotEnabled()
         }
     }
 }
@@ -105,6 +106,6 @@ private fun DefaultLoginScreen(uiState: LoginUiState) {
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
         onClickSubmit = {},
-        onDismissLoginFailureDialog = {}
+        onDismissErrorDialog = {}
     )
 }

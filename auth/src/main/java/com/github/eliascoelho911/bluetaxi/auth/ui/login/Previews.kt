@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
 import kotlinx.coroutines.delay
@@ -34,7 +35,7 @@ private fun FailureLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
         LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
             loginButtonState = ProgressButtonState.CONTENT,
-            loginFailed = true))
+            errorMessage = R.string.invalid_credentials_error))
     }
 }
 
@@ -60,7 +61,7 @@ private fun FailureLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
         LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
             loginButtonState = ProgressButtonState.CONTENT,
-            loginFailed = true))
+            errorMessage = R.string.invalid_credentials_error))
     }
 }
 
@@ -79,7 +80,7 @@ private fun LoginScreenPreview(targetUiStateOnSubmit: LoginUiState) {
             }
         },
         onDismissLoginFailureDialog = {
-            uiState = uiState.copy(loginFailed = false)
+            uiState = uiState.copy(errorMessage = R.string.invalid_credentials_error)
         }
     )
 }
@@ -99,5 +100,5 @@ private fun LoginScreenPreview(
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
         onClickSubmit = onClickSubmit,
-        onDismissLoginFailureDialog = onDismissLoginFailureDialog)
+        onDismissErrorDialog = onDismissLoginFailureDialog)
 }
