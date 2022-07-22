@@ -8,6 +8,8 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import com.github.eliascoelho911.bluetaxi.auth.R
 import com.github.eliascoelho911.bluetaxi.auth.ui.login.LoginScreenTestTags.ErrorDialog
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
@@ -23,6 +25,18 @@ internal fun LoginScreenTest.loginScreenRobot(
 internal class LoginScreenRobot(
     loginScreenTest: LoginScreenTest,
 ) : BaseRobotScreen(loginScreenTest.composeTestRule) {
+
+    fun enterEmail(email: String) = withRule {
+        onEmailTextFieldNode().performTextInput(email)
+    }
+
+    fun enterPassword(password: String) = withRule {
+        onPasswordTextFieldNode().performTextInput(password)
+    }
+
+    fun clickOnLogInButton() = withRule {
+        onLogInButtonNode().performClick()
+    }
 
     fun assertInvalidEmailAlertIsDisplayed() {
         withRule {
@@ -68,8 +82,11 @@ internal class LoginScreenRobot(
     private fun ComposeContentTestRule.onErrorDialogNode() =
         onNodeWithTag(ErrorDialog)
 
-    private fun ComposeContentTestRule.onEmailTextFieldNode() =
+    fun ComposeContentTestRule.onEmailTextFieldNode() =
         onNodeWithText(getString(R.string.email))
+
+    fun ComposeContentTestRule.onPasswordTextFieldNode() =
+        onNodeWithText(getString(R.string.password))
 
     private fun ComposeContentTestRule.onInvalidEmailAlertNode() =
         onNodeWithText(getString(R.string.invalid_email_error))

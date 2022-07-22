@@ -47,7 +47,7 @@ object Versions {
     }
 
     object Robolectric {
-        const val robolectric = "4.8"
+        const val robolectric = "4.8.1"
     }
 
     object MockK {
