@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.auth.login
+package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -9,7 +9,7 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.github.eliascoelho911.bluetaxi.auth.R
-import com.github.eliascoelho911.bluetaxi.auth.login.LoginScreenTestTags.LoginFailedDialog
+import com.github.eliascoelho911.bluetaxi.auth.ui.login.LoginScreenTestTags.LoginFailedDialog
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasError
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasNoError

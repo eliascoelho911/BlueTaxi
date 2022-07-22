@@ -1,14 +1,15 @@
-package com.github.eliascoelho911.bluetaxi.auth.login
+package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.github.eliascoelho911.bluetaxi.auth.domain.usecases.LoginUseCase
 import com.github.eliascoelho911.bluetaxi.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import kotlinx.coroutines.delay
 
-internal class LoginViewModel : ViewModel() {
+internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
 
@@ -19,8 +20,11 @@ internal class LoginViewModel : ViewModel() {
         }
 
         loadingLogin()
+
         delay(2000)
-        failureOnLoggingInState()
+
+        val successfullyLoggedIn = loginUseCase(email, password)
+        if (successfullyLoggedIn) successOnLoggingInState() else failureOnLoggingInState()
     }
 
     private fun invalidEmailState() {

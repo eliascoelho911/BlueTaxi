@@ -1,11 +1,13 @@
-package com.github.eliascoelho911.bluetaxi.auth.login
+package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.AlertDialog
@@ -18,15 +20,20 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -48,8 +55,8 @@ import org.koin.androidx.compose.getViewModel
 fun LoginScreen() {
     val loginViewModel = getViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
-    var email by remember { mutableStateOf(String()) }
-    var password by remember { mutableStateOf(String()) }
+    var email by rememberSaveable { mutableStateOf(String()) }
+    var password by rememberSaveable { mutableStateOf(String()) }
     val uiState = loginViewModel.uiState
 
     LaunchedEffect(Unit) {
@@ -93,8 +100,14 @@ internal fun LoginScreen(
     onClickSubmit: () -> Unit,
     onDismissLoginFailureDialog: () -> Unit,
 ) {
-    Scaffold(topBar = { LoginTopAppBar { /*TODO*/ } }) { contentPadding ->
-        Column(modifier = Modifier.padding(contentPadding)) {
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarScrollState())
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        topBar = { LoginTopAppBar({ /*TODO*/ }, scrollBehavior) }
+    ) { contentPadding ->
+        Column(modifier = Modifier
+            .padding(contentPadding)
+            .verticalScroll(rememberScrollState())) {
             Text(modifier = Modifier.padding(horizontal = ScreenPadding),
                 text = stringResource(id = R.string.login_subtitle),
                 style = MaterialTheme.typography.bodyLarge)
@@ -161,10 +174,11 @@ internal fun LoginScreen(
 }
 
 @Composable
-private fun LoginTopAppBar(onNavigationBack: () -> Unit) {
+private fun LoginTopAppBar(onNavigationBack: () -> Unit, scrollBehavior: TopAppBarScrollBehavior) {
     LargeTopAppBar(
         title = { Text(text = stringResource(id = R.string.login_title)) },
-        navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) })
+        navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) },
+        scrollBehavior = scrollBehavior)
 }
 
 @Composable

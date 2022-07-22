@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.auth.login
+package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 

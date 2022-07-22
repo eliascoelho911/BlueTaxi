@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.auth.login
+package com.github.eliascoelho911.bluetaxi.auth.ui.login
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
