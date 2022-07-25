@@ -16,13 +16,19 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.github.eliascoelho911.bluetaxi.commons.test.AndroidTestRunner"
     }
 
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+        animationsDisabled = true
     }
 
     packagingOptions {

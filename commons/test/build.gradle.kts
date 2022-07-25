@@ -11,5 +11,8 @@ android {
 dependencies {
     koin()
     implementation(TestDependencies.JUnit.junit)
+    implementation(TestDependencies.Android.rules)
     implementation(TestDependencies.Compose.junit4)
+    implementation(TestDependencies.Android.coreKtx)
+    implementation(TestDependencies.Android.coreTesting)
 }

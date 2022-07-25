@@ -69,6 +69,8 @@ fun DependencyHandlerScope.instrumentationTestDependencies() {
     "debugImplementation"(TestDependencies.Android.fragmentTesting)
     "debugImplementation"(TestDependencies.Compose.uiTestManifest)
     "androidTestImplementation"(TestDependencies.Android.junitExt)
+    "androidTestImplementation"(TestDependencies.Koin.koinTest)
+    "androidTestImplementation"(TestDependencies.Koin.koinTestJunit4)
     "androidTestImplementation"(TestDependencies.Android.espressoCore)
     "androidTestImplementation"(TestDependencies.Android.coreKtx)
     "androidTestImplementation"(TestDependencies.Android.coreTesting)

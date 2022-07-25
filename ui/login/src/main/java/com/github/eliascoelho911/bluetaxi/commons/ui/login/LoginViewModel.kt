@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import com.github.eliascoelho911.bluetaxi.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.domain.usecases.LoginUseCase
-import kotlinx.coroutines.delay
 
 internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
@@ -20,8 +19,6 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
         }
 
         loggingIn()
-
-        delay(2000)
 
         val isSuccessfullyLoggedIn = loginUseCase(email, password)
         if (isSuccessfullyLoggedIn) successfullyLoggedIn() else failedToLogin()
@@ -36,7 +33,8 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
     }
 
     private fun successfullyLoggedIn() {
-        uiState = uiState.copy(loginButtonState = ProgressButtonState.SUCCESS, isUserLoggedIn = true)
+        uiState =
+            uiState.copy(loginButtonState = ProgressButtonState.SUCCESS, isUserLoggedIn = true)
     }
 
     private fun failedToLogin() {

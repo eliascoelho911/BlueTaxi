@@ -51,7 +51,7 @@ object Versions {
     }
 
     object MockK {
-        const val mockK = "1.12.4"
+        const val mockK = "1.12.3"
     }
 
     object Compose {

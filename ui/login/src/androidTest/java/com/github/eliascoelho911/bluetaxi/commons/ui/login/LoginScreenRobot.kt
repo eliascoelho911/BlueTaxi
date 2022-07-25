@@ -9,7 +9,9 @@ import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import com.github.eliascoelho911.bluetaxi.commons.ui.login.LoginScreenTestTags.ErrorDialog
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasError
@@ -25,12 +27,20 @@ internal class LoginScreenRobot(
     loginScreenTest: LoginScreenTest,
 ) : BaseRobotScreen(loginScreenTest.composeTestRule) {
 
-    fun enterEmail(email: String) = withRule {
-        onEmailTextFieldNode().performTextInput(email)
+    fun enterInvalidEmail() = withRule {
+        enterEmail("invalid_email")
     }
 
-    fun enterPassword(password: String) = withRule {
-        onPasswordTextFieldNode().performTextInput(password)
+    fun enterValidEmail() = withRule {
+        enterEmail("valid_email@hotmail.com")
+    }
+
+    fun clearEmail() = withRule {
+        onEmailTextFieldNode().performTextClearance()
+    }
+
+    fun enterAnyPassword() = withRule {
+        enterPassword("123456")
     }
 
     fun clickOnLogInButton() = withRule {
@@ -51,13 +61,13 @@ internal class LoginScreenRobot(
         }
     }
 
-    fun assertErrorDialogIsDisplayed() {
+    fun assertErrorDialogExists() {
         withRule {
-            onErrorDialogNode().assertIsDisplayed()
+            onErrorDialogNode().assertExists()
         }
     }
 
-    fun assertErrorDialogIsNotDisplayed() {
+    fun assertErrorDialogDoesNotExist() {
         withRule {
             onErrorDialogNode().assertDoesNotExist()
         }
@@ -73,6 +83,14 @@ internal class LoginScreenRobot(
         withRule {
             onLogInButtonNode().assertIsNotEnabled()
         }
+    }
+
+    private fun enterEmail(email: String) = withRule {
+        onEmailTextFieldNode().performTextInput(email)
+    }
+
+    private fun enterPassword(@Suppress("SameParameterValue") password: String) = withRule {
+        onPasswordTextFieldNode().performTextInput(password)
     }
 
     private fun ComposeContentTestRule.onLogInButtonNode() =

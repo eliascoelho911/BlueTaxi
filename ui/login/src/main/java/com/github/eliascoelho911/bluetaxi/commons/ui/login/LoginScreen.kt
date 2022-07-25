@@ -52,11 +52,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
-private const val DelayToFinishLogin = 2000L
+private const val DefaultDelayToFinishLogin = 2000L
 
 @Composable
 fun LoginScreen(
     onUserLogIn: () -> Unit,
+    delayToFinishLogin: Long = DefaultDelayToFinishLogin
 ) {
     val loginViewModel = getViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
@@ -71,7 +72,7 @@ fun LoginScreen(
 
     LaunchedEffect(uiState) {
         if (uiState.isUserLoggedIn) {
-            delay(DelayToFinishLogin)
+            delay(delayToFinishLogin)
             currentOnUserLogIn()
         }
     }
@@ -172,8 +173,8 @@ internal fun LoginScreen(
             }
         }
 
-        if (uiState.errorMessage != null) ShowErrorDialog(uiState.errorMessage,
-            onDismissErrorDialog)
+        if (uiState.errorMessage != null)
+            ShowErrorDialog(uiState.errorMessage, onDismissErrorDialog)
     }
 }
 
