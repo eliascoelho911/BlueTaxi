@@ -13,7 +13,6 @@ object Dependencies {
         const val material3 = "androidx.compose.material3:material3:${Versions.Compose.material3}"
         const val preview = "androidx.compose.ui:ui-tooling-preview:${Versions.Compose.compose}"
         const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.Compose.compose}"
-        const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.Compose.compose}"
         const val icons = "androidx.compose.material:material-icons-extended:${Versions.Compose.compose}"
         const val navigation = "androidx.navigation:navigation-compose:${Versions.Compose.navigation}"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:${Versions.Compose.constraintLayout}"
@@ -51,7 +50,6 @@ fun DependencyHandlerScope.compose() {
     "implementation"(Dependencies.Compose.preview)
     "implementation"(Dependencies.Compose.icons)
     "debugImplementation"(Dependencies.Compose.uiTooling)
-    "debugImplementation"(Dependencies.Compose.uiTestManifest)
     "debugImplementation"("androidx.customview:customview:1.2.0-alpha01")
     "debugImplementation"("androidx.customview:customview-poolingcontainer:1.0.0-alpha01")
 }

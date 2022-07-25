@@ -44,27 +44,38 @@ object TestDependencies {
 
     object Compose {
         const val junit4 = "androidx.compose.ui:ui-test-junit4:${Versions.Compose.compose}"
+        const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.Compose.compose}"
     }
 }
 
-//todo Separar implementação de testes unitários, de testes instrumentados
-fun DependencyHandlerScope.test() {
-    "testImplementation"(TestDependencies.Robolectric.robolectric)
+fun DependencyHandlerScope.unitTestDependencies() {
     "testImplementation"(TestDependencies.JUnit.junit)
-    "testImplementation"(TestDependencies.Android.junitExt)
-    "testImplementation"(TestDependencies.Android.espressoCore)
-    "testImplementation"(TestDependencies.Android.coreKtx)
-    "testImplementation"(TestDependencies.Android.coreTesting)
-    "testImplementation"(TestDependencies.Kotlin.coroutinesTest)
-    "testImplementation"(TestDependencies.Android.runner)
     "testImplementation"(TestDependencies.MockK.mockK)
+}
+
+fun DependencyHandlerScope.instrumentationTestDependencies() {
+    "testImplementation"(TestDependencies.Robolectric.robolectric)
     "testImplementation"(TestDependencies.Koin.koinTest)
     "testImplementation"(TestDependencies.Koin.koinTestJunit4)
     "testImplementation"(TestDependencies.Compose.junit4)
     "testImplementation"(TestDependencies.Android.rules)
+    "testImplementation"(TestDependencies.Android.runner)
+    "testImplementation"(TestDependencies.Android.espressoCore)
+    "testImplementation"(TestDependencies.Android.junitExt)
+    "testImplementation"(TestDependencies.Android.coreKtx)
+    "testImplementation"(TestDependencies.Android.coreTesting)
+    "testImplementation"(TestDependencies.Kotlin.coroutinesTest)
     "testImplementation"(project(":commons:test"))
     "debugImplementation"(TestDependencies.Android.fragmentTesting)
+    "debugImplementation"(TestDependencies.Compose.uiTestManifest)
+    "androidTestImplementation"(TestDependencies.Android.junitExt)
+    "androidTestImplementation"(TestDependencies.Android.espressoCore)
+    "androidTestImplementation"(TestDependencies.Android.coreKtx)
+    "androidTestImplementation"(TestDependencies.Android.coreTesting)
+    "androidTestImplementation"(TestDependencies.Compose.junit4)
+    "androidTestImplementation"(TestDependencies.Android.rules)
     "androidTestImplementation"(TestDependencies.Android.runner)
     "androidTestImplementation"(TestDependencies.MockK.android)
     "androidTestImplementation"(TestDependencies.Robolectric.annotations)
+    "androidTestImplementation"(project(":commons:test"))
 }

@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    unitTestDependencies()
+    koin()
 }

@@ -11,5 +11,4 @@ android {
 dependencies {
     compose()
     systemUiController()
-    test()
 }

@@ -9,6 +9,14 @@ fun DependencyHandlerScope.commonsModule() {
     "implementation"(project(":commons"))
 }
 
-fun DependencyHandlerScope.authModule() {
-    "implementation"(project(":auth"))
+fun DependencyHandlerScope.domainModule() {
+    "implementation"(project(":domain"))
+}
+
+fun DependencyHandlerScope.navigationModule() {
+    "implementation"(project(":navigation"))
+}
+
+fun DependencyHandlerScope.uiLoginModule() {
+    "implementation"(project(":ui:login"))
 }
