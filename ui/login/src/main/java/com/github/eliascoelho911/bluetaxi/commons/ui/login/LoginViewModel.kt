@@ -14,7 +14,7 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
 
     suspend fun logIn(email: String, password: String) {
         if (!EmailValidator.isEmail(email)) {
-            invalidEmail()
+            emailIsInvalid()
             return
         }
 
@@ -24,7 +24,7 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
         if (isSuccessfullyLoggedIn) successfullyLoggedIn() else failedToLogin()
     }
 
-    private fun invalidEmail() {
+    private fun emailIsInvalid() {
         uiState = LoginUiState(emailIsInvalid = true, canLogIn = false)
     }
 
@@ -43,16 +43,20 @@ internal class LoginViewModel(private val loginUseCase: LoginUseCase) : ViewMode
 
     fun validateEmailHasBeenCorrected(email: String) {
         if (uiState.emailIsInvalid && EmailValidator.isEmail(email))
-            validEmail()
+            emailIsValid()
     }
 
-    private fun validEmail() {
+    private fun emailIsValid() {
         uiState = uiState.copy(emailIsInvalid = false)
     }
 
     fun validateIfCanLogIn(email: String, password: String) {
         if (!uiState.emailIsInvalid)
-            uiState = uiState.copy(canLogIn = email.isNotBlank() && password.isNotBlank())
+            canDontLogin(email, password)
+    }
+
+    private fun canDontLogin(email: String, password: String) {
+        uiState = uiState.copy(canLogIn = email.isNotBlank() && password.isNotBlank())
     }
 
     fun errorMessageShown() {
