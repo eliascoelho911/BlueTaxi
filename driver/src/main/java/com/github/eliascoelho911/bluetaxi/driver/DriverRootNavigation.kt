@@ -1,15 +1,13 @@
-package com.github.eliascoelho911.bluetaxi.passenger
+package com.github.eliascoelho911.bluetaxi.driver
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -26,12 +24,12 @@ import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun PassengerRootNavGraph(passengerState: PassengerState = rememberPassengerState()) {
+internal fun PassengerRootNavGraph(driverState: DriverState = rememberDriverState()) {
     AnimatedNavHost(
-        navController = passengerState.navHostController,
+        navController = driverState.navHostController,
         startDestination = ScreenGroup.Auth.route
     ) {
-        addAuthNavigation(passengerState.navHostController)
+        addAuthNavigation(driverState.navHostController)
     }
 }
 
@@ -49,9 +47,9 @@ private fun NavGraphBuilder.addWelcomeScreen(navHostController: NavHostControlle
     ) {
         WelcomeScreen(
             title = {
-                Image(painter = painterResource(id = R.drawable.ic_logo_passenger),
+                Image(painter = painterResource(id = R.drawable.ic_logo_driver),
                     contentDescription = stringResource(id = R.string.app_name),
-                    modifier = Modifier.size(151.dp, 73.dp))
+                    modifier = Modifier.size(151.dp, 107.dp))
             },
             subtitle = {
                 Text(text = stringResource(id = R.string.welcome_subtitle))

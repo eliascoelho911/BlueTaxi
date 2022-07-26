@@ -50,7 +50,7 @@ fun WelcomeScreen(
                     width = Dimension.fillToConstraints
                 },
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
                     title()
