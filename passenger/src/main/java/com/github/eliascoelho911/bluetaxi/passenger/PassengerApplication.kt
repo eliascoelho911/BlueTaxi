@@ -1,8 +1,8 @@
 package com.github.eliascoelho911.bluetaxi.passenger
 
 import android.app.Application
-import com.github.eliascoelho911.bluetaxi.commons.ui.login.LoginUiModule
 import com.github.eliascoelho911.bluetaxi.domain.di.DomainModule
+import com.github.eliascoelho911.bluetaxi.ui.login.LoginUiModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

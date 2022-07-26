@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.commons.ui.login
+package com.github.eliascoelho911.bluetaxi.ui.login
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
@@ -11,11 +11,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.performTextReplacement
-import com.github.eliascoelho911.bluetaxi.commons.ui.login.LoginScreenTestTags.ErrorDialog
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseRobotScreen
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasError
 import com.github.eliascoelho911.bluetaxi.commons.test.assertHasNoError
+import com.github.eliascoelho911.bluetaxi.ui.login.LoginScreenTestTags.ErrorDialog
 
 internal fun LoginScreenTest.loginScreenRobot(
     block: LoginScreenRobot.() -> Unit,

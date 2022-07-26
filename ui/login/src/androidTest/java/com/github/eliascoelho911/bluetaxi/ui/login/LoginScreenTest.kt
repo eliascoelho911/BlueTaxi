@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.commons.ui.login
+package com.github.eliascoelho911.bluetaxi.ui.login
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseComposableTest

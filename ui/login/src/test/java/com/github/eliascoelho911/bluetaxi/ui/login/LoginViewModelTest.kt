@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.commons.ui.login
+package com.github.eliascoelho911.bluetaxi.ui.login
 
 import com.github.eliascoelho911.bluetaxi.commons.EmailValidator
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState

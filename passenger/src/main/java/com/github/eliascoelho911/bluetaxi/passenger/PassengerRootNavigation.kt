@@ -4,9 +4,9 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.github.eliascoelho911.bluetaxi.commons.ui.login.LoginScreen
 import com.github.eliascoelho911.bluetaxi.navigation.Screen
 import com.github.eliascoelho911.bluetaxi.navigation.ScreenGroup
+import com.github.eliascoelho911.bluetaxi.ui.login.LoginScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 
