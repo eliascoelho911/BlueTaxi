@@ -48,6 +48,7 @@ import com.github.eliascoelho911.bluetaxi.designsystem.components.PasswordTextFi
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButton
 import com.github.eliascoelho911.bluetaxi.designsystem.components.ProgressButtonState
 import com.github.eliascoelho911.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
+import com.github.eliascoelho911.bluetaxi.designsystem.util.horizontalScreenPadding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
@@ -56,8 +57,10 @@ private const val DefaultDelayToFinishLogin = 2000L
 
 @Composable
 fun LoginScreen(
+    delayToFinishLogin: Long = DefaultDelayToFinishLogin,
     onUserLogIn: () -> Unit,
-    delayToFinishLogin: Long = DefaultDelayToFinishLogin
+    onNavigationBack: (() -> Unit)?,
+    onClickSignUp: () -> Unit,
 ) {
     val loginViewModel = getViewModel<LoginViewModel>()
     val coroutineScope = rememberCoroutineScope()
@@ -99,7 +102,9 @@ fun LoginScreen(
         },
         onDismissErrorDialog = {
             loginViewModel.errorMessageShown()
-        }
+        },
+        onNavigationBack = onNavigationBack,
+        onClickSignUp = onClickSignUp
     )
 }
 
@@ -113,16 +118,18 @@ internal fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onClickSubmit: () -> Unit,
     onDismissErrorDialog: () -> Unit,
+    onNavigationBack: (() -> Unit)?,
+    onClickSignUp: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarScrollState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { LoginTopAppBar({ /*TODO*/ }, scrollBehavior) }
+        topBar = { LoginTopAppBar(onNavigationBack, scrollBehavior) }
     ) { contentPadding ->
         Column(modifier = Modifier
             .padding(contentPadding)
             .verticalScroll(rememberScrollState())) {
-            Text(modifier = Modifier.padding(horizontal = ScreenPadding),
+            Text(modifier = Modifier.horizontalScreenPadding(),
                 text = stringResource(id = R.string.login_subtitle),
                 style = MaterialTheme.typography.bodyLarge)
 
@@ -132,7 +139,7 @@ internal fun LoginScreen(
                 email,
                 onEmailChange = onEmailChange,
                 emailIsInvalid = uiState.emailIsInvalid,
-                modifier = Modifier.padding(horizontal = ScreenPadding)
+                modifier = Modifier.horizontalScreenPadding()
             )
 
             Spacer(Modifier.height(24.dp))
@@ -140,7 +147,7 @@ internal fun LoginScreen(
             PasswordTextField(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = ScreenPadding),
+                    .horizontalScreenPadding(),
                 value = password,
                 onValueChange = onPasswordChange,
                 label = { Text(text = stringResource(id = R.string.password)) }
@@ -149,13 +156,13 @@ internal fun LoginScreen(
             SubmitButton(uiState.loginButtonState,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = ScreenPadding)
+                    .horizontalScreenPadding()
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
                 onClick = onClickSubmit,
                 enabled = uiState.canLogIn)
 
-            TextButton(onClick = { /*TODO*/ },
+            TextButton(onClick = onClickSignUp,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 colors = TextButtonSecondaryContentColor
             ) {
@@ -179,10 +186,13 @@ internal fun LoginScreen(
 }
 
 @Composable
-private fun LoginTopAppBar(onNavigationBack: () -> Unit, scrollBehavior: TopAppBarScrollBehavior) {
+private fun LoginTopAppBar(
+    onNavigationBack: (() -> Unit)?,
+    scrollBehavior: TopAppBarScrollBehavior,
+) {
     LargeTopAppBar(
         title = { Text(text = stringResource(id = R.string.login_title)) },
-        navigationIcon = { NavigationBackIcon(onClick = onNavigationBack) },
+        navigationIcon = { if (onNavigationBack != null) NavigationBackIcon(onClick = onNavigationBack) },
         scrollBehavior = scrollBehavior)
 }
 
@@ -243,8 +253,6 @@ private fun ShowErrorDialog(@StringRes messageRes: Int, onDismissErrorDialog: ()
             }
         })
 }
-
-private val ScreenPadding = 16.dp
 
 private val TextButtonSecondaryContentColor
     @Composable get() = ButtonDefaults.textButtonColors(

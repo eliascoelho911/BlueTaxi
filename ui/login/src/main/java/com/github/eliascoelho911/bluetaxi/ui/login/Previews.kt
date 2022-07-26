@@ -99,5 +99,7 @@ private fun LoginScreenPreview(
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
         onClickSubmit = onClickSubmit,
-        onDismissErrorDialog = onDismissLoginFailureDialog)
+        onDismissErrorDialog = onDismissLoginFailureDialog,
+        onNavigationBack = {},
+        onClickSignUp = {})
 }

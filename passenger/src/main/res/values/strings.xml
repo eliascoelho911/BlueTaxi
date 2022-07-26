@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Blue Taxi</string>
+    <string name="blue">Blue</string>
+    <string name="welcome_subtitle">Peça uma viagem quando e onde quiser</string>
 </resources>

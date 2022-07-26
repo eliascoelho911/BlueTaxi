@@ -30,7 +30,9 @@ dependencies {
     compose()
 
     designSystemModule()
-    uiLoginModule()
     domainModule()
     navigationModule()
+    commonsModule()
+    uiLoginModule()
+    uiWelcomeModule()
 }

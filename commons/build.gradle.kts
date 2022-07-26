@@ -3,5 +3,7 @@ plugins {
 }
 
 dependencies {
+    composeNavigation()
+
     unitTestDependencies()
 }

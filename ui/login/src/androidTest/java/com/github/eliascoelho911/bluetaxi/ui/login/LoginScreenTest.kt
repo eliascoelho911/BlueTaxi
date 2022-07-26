@@ -1,5 +1,6 @@
 package com.github.eliascoelho911.bluetaxi.ui.login
 
+import androidx.compose.runtime.Composable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.eliascoelho911.bluetaxi.commons.test.BaseComposableTest
 import com.github.eliascoelho911.bluetaxi.designsystem.theme.BlueTaxiTheme
@@ -31,7 +32,7 @@ class LoginScreenTest : BaseComposableTest() {
         composableTest {
             setContent {
                 BlueTaxiTheme {
-                    LoginScreen(onUserLogIn = {})
+                    LoginScreenImpl()
                 }
             }
 
@@ -49,7 +50,7 @@ class LoginScreenTest : BaseComposableTest() {
         composableTest {
             setContent {
                 BlueTaxiTheme {
-                    LoginScreen(onUserLogIn = {})
+                    LoginScreenImpl()
                 }
             }
 
@@ -70,7 +71,7 @@ class LoginScreenTest : BaseComposableTest() {
 
         setContent {
             BlueTaxiTheme {
-                LoginScreen(onUserLogIn = {})
+                LoginScreenImpl()
             }
         }
 
@@ -89,7 +90,10 @@ class LoginScreenTest : BaseComposableTest() {
 
         setContent {
             BlueTaxiTheme {
-                LoginScreen(onUserLogIn = onUserLogIn, delayToFinishLogin = 0)
+                LoginScreen(onUserLogIn = onUserLogIn,
+                    delayToFinishLogin = 0,
+                    onNavigationBack = {},
+                    onClickSignUp = {})
             }
         }
 
@@ -112,5 +116,10 @@ class LoginScreenTest : BaseComposableTest() {
 
     private fun mockLoginUseCase(result: Boolean) {
         coEvery { loginUseCase(any(), any()) } returns result
+    }
+
+    @Composable
+    private fun LoginScreenImpl() {
+        LoginScreen(onUserLogIn = {}, onNavigationBack = {}, onClickSignUp = {})
     }
 }

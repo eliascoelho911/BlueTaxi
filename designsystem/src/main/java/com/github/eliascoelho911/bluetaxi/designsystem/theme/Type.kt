@@ -8,11 +8,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.github.eliascoelho911.bluetaxi.designsystem.R
 
-private val RubikFontFamily = FontFamily(
+val RubikFontFamily = FontFamily(
     Font(R.font.rubik_regular),
     Font(R.font.rubik_medium, weight = FontWeight.Medium),
     Font(R.font.rubik_semibold, weight = FontWeight.SemiBold),
     Font(R.font.rubik_bold, weight = FontWeight.Bold),
+)
+
+val JockeyOneFontFamily = FontFamily(
+    Font(R.font.jockey_one_regular),
 )
 
 val Typography = Typography(

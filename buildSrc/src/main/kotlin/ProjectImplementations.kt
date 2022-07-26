@@ -20,3 +20,7 @@ fun DependencyHandlerScope.navigationModule() {
 fun DependencyHandlerScope.uiLoginModule() {
     "implementation"(project(":ui:login"))
 }
+
+fun DependencyHandlerScope.uiWelcomeModule() {
+    "implementation"(project(":ui:welcome"))
+}

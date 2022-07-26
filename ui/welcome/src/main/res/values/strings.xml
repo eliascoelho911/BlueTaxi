@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="enter_with_email">Entrar com email</string>
+    <string name="registration">Cadastre-se</string>
+    <string name="dont_have_account">Não tem uma conta?</string>
+</resources>

@@ -9,7 +9,6 @@ android {
 }
 
 dependencies {
-    appCompat()
     compose()
     koin()
 
