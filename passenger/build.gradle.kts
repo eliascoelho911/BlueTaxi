@@ -34,5 +34,4 @@ dependencies {
     navigationModule()
     commonsModule()
     uiLoginModule()
-    uiWelcomeModule()
 }

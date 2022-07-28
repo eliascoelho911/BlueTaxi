@@ -11,7 +11,7 @@ class DriverRootActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BlueTaxiTheme {
-                PassengerRootNavGraph()
+                DriverRootNavGraph()
             }
         }
     }

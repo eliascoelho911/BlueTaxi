@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.designsystem.transitions
+package com.github.eliascoelho911.bluetaxi.navigation.transitions
 
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
