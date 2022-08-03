@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.ui.welcome
+package com.bluetaxi.welcome
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package com.github.eliascoelho911.bluetaxi.ui.welcome
+package com.bluetaxi.welcome
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.bluetaxi.designsystem.util.screenPadding
+import com.github.eliascoelho911.bluetaxi.ui.welcome.R
 
 @Composable
 fun WelcomeScreen(
