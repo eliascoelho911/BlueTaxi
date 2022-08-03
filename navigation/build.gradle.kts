@@ -11,6 +11,6 @@ android {
 dependencies {
     composeNavigationAnimation()
 
-    uiLoginModule()
-    uiWelcomeModule()
+    loginFeature()
+    welcomeFeature()
 }

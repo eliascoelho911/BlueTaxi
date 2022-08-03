@@ -6,7 +6,7 @@ import com.github.eliascoelho911.bluetaxi.navigation.BlueTaxiNavigationControlle
 import com.github.eliascoelho911.bluetaxi.navigation.Screen
 import com.github.eliascoelho911.bluetaxi.navigation.transitions.transitionSlideInHorizontal
 import com.github.eliascoelho911.bluetaxi.navigation.transitions.transitionSlideOutHorizontal
-import com.github.eliascoelho911.bluetaxi.ui.login.LoginScreen
+import com.bluetaxi.login.presentation.LoginScreen
 import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)

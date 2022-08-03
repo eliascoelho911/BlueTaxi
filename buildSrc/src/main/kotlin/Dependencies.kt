@@ -3,6 +3,7 @@ import org.gradle.kotlin.dsl.DependencyHandlerScope
 object Dependencies {
     object Android {
         const val appCompat = "androidx.appcompat:appcompat:${Versions.Android.appCompat}"
+        const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.Android.lifecycle}"
         const val coreKtx = "androidx.core:core-ktx:${Versions.Android.coreKtx}"
         const val lifecycleRuntimeKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.Android.lifecycle}"
         const val activityCompose = "androidx.activity:activity-compose:${Versions.Android.activityCompose}"
@@ -11,6 +12,7 @@ object Dependencies {
     object Compose {
         const val ui = "androidx.compose.ui:ui:${Versions.Compose.compose}"
         const val material3 = "androidx.compose.material3:material3:${Versions.Compose.material3}"
+        const val runtime = "androidx.compose.runtime:runtime:${Versions.Compose.compose}"
         const val preview = "androidx.compose.ui:ui-tooling-preview:${Versions.Compose.compose}"
         const val uiTooling = "androidx.compose.ui:ui-tooling:${Versions.Compose.compose}"
         const val icons = "androidx.compose.material:material-icons-extended:${Versions.Compose.compose}"
@@ -58,6 +60,10 @@ fun DependencyHandlerScope.constraintLayoutCompose() {
     "implementation"(Dependencies.Compose.constraintLayout)
 }
 
+fun DependencyHandlerScope.composeRuntime() {
+    "implementation"(Dependencies.Compose.runtime)
+}
+
 fun DependencyHandlerScope.koin() {
     "implementation"(Dependencies.Koin.core)
     "implementation"(Dependencies.Koin.android)
@@ -66,6 +72,10 @@ fun DependencyHandlerScope.koin() {
 
 fun DependencyHandlerScope.appCompat() {
     "implementation"(Dependencies.Android.appCompat)
+}
+
+fun DependencyHandlerScope.viewModel() {
+    "implementation"(Dependencies.Android.viewModel)
 }
 
 fun DependencyHandlerScope.composeNavigation() {

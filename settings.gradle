@@ -6,12 +6,13 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BlueTaxi"
-include ':commons'
+include ':driver:app'
+include ':passenger:app'
 include ':commons:test'
+include ':commons:commons'
 include ':designsystem'
-include ':domain'
-include ':driver'
 include ':navigation'
-include ':passenger'
-include ':ui:login'
-include ':ui:welcome'
+include ':features:login'
+include ':features:welcome'
+include ':passenger:features'
+include ':commons:core'
