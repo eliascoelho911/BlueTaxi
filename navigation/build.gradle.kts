@@ -10,7 +10,4 @@ android {
 
 dependencies {
     composeNavigationAnimation()
-
-    loginFeature()
-    welcomeFeature()
 }

@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -26,12 +23,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -46,87 +39,77 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.bluetaxi.designsystem.components.PasswordTextField
 import com.bluetaxi.designsystem.components.ProgressButton
-import com.bluetaxi.designsystem.components.ProgressButtonState
 import com.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
 import com.bluetaxi.designsystem.util.horizontalScreenPadding
 import com.bluetaxi.login.R
-import com.bluetaxi.login.domain.entities.Credentials
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.github.eliascoelho911.bluetaxi.navigation.NavigationController
 import org.koin.androidx.compose.getViewModel
-
-private const val DefaultDelayToFinishLogin = 2000L
 
 @Composable
 fun LoginScreen(
-    delayToFinishLogin: Long = DefaultDelayToFinishLogin,
-    onUserLogIn: () -> Unit,
-    onNavigationBack: (() -> Unit)?,
-    onClickSignUp: () -> Unit,
+    navigationController: NavigationController,
+    onNavigateToHome: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
 ) {
-    val loginViewModel = getViewModel<LoginViewModel>()
-    val coroutineScope = rememberCoroutineScope()
-    var email by rememberSaveable { mutableStateOf(String()) }
-    var password by rememberSaveable { mutableStateOf(String()) }
-    val uiState = loginViewModel.uiState
-    val currentOnUserLogIn by rememberUpdatedState(onUserLogIn)
+    val viewModel = getViewModel<LoginViewModel>()
+    val state by viewModel.container.stateFlow.collectAsState()
 
     LaunchedEffect(Unit) {
-        loginViewModel.validateIfCanLogIn(email, password)
-    }
-
-    LaunchedEffect(uiState) {
-        if (uiState.isUserLoggedIn) {
-            delay(delayToFinishLogin)
-            currentOnUserLogIn()
+        viewModel.container.sideEffectFlow.collect {
+            handleSideEffect(
+                it,
+                navigationController,
+                onNavigateToHome,
+                onNavigateToSignUp
+            )
         }
     }
 
     LoginScreen(
-        uiState = uiState,
-        email = email,
-        password = password,
-        onEmailChange = {
-            email = it
-            with(loginViewModel) {
-                validateEmailHasBeenCorrected(email)
-                validateIfCanLogIn(email, password)
-            }
-        },
-        onPasswordChange = {
-            password = it
-            loginViewModel.validateIfCanLogIn(email, password)
-        },
-        onClickSubmit = {
-            coroutineScope.launch {
-                loginViewModel.logIn(Credentials(email, password))
-            }
-        },
-        onDismissErrorDialog = {
-            loginViewModel.errorMessageShown()
-        },
-        onNavigationBack = onNavigationBack,
-        onClickSignUp = onClickSignUp
+        state = state,
+        email = state.email,
+        password = state.password,
+        navigationIconIsVisible = navigationController.hasBackQueue,
+        onEmailChange = { viewModel.emailChanged(it) },
+        onPasswordChange = { viewModel.passwordChanged(it) },
+        onLoginClick = { viewModel.logIn() },
+        onErrorDialogDismiss = { viewModel.errorShown() },
+        onNavigationBack = { viewModel.navigationBack() },
+        onClickSignUp = { viewModel.navigateToSignUp() }
     )
+}
+
+private fun handleSideEffect(
+    sideEffect: LoginSideEffect,
+    navigationController: NavigationController,
+    onNavigateToHome: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
+) {
+    when (sideEffect) {
+        LoginSideEffect.NavigateToHome -> onNavigateToHome()
+        LoginSideEffect.NavigationBack -> navigationController.popBackStack()
+        LoginSideEffect.NavigateToSignUp -> onNavigateToSignUp()
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoginScreen(
-    uiState: LoginUiState,
+    state: LoginState,
     email: String,
     password: String,
+    navigationIconIsVisible: Boolean,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onClickSubmit: () -> Unit,
-    onDismissErrorDialog: () -> Unit,
-    onNavigationBack: (() -> Unit)?,
+    onLoginClick: () -> Unit,
+    onErrorDialogDismiss: () -> Unit,
+    onNavigationBack: () -> Unit,
     onClickSignUp: () -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarScrollState())
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        topBar = { LoginTopAppBar(onNavigationBack, scrollBehavior) }
+        topBar = { LoginTopAppBar(navigationIconIsVisible, scrollBehavior, onNavigationBack) }
     ) { contentPadding ->
         Column(modifier = Modifier
             .padding(contentPadding)
@@ -140,7 +123,7 @@ internal fun LoginScreen(
             EmailTextField(
                 email,
                 onEmailChange = onEmailChange,
-                emailIsInvalid = uiState.emailIsInvalid,
+                emailIsInvalid = state.emailIsInvalid,
                 modifier = Modifier.horizontalScreenPadding()
             )
 
@@ -155,14 +138,15 @@ internal fun LoginScreen(
                 label = { Text(text = stringResource(id = R.string.password)) }
             )
 
-            SubmitButton(uiState.loginButtonState,
+            SubmitButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScreenPadding()
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
-                onClick = onClickSubmit,
-                enabled = uiState.canLogIn)
+                onClick = onLoginClick,
+                isLoading = state.isLoggingIn,
+                enabled = state.loginButtonIsEnabled)
 
             TextButton(onClick = onClickSignUp,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -182,19 +166,20 @@ internal fun LoginScreen(
             }
         }
 
-        if (uiState.errorMessage != null)
-            ShowErrorDialog(uiState.errorMessage, onDismissErrorDialog)
+        if (state.errorMessage != null)
+            ShowErrorDialog(state.errorMessage, onErrorDialogDismiss)
     }
 }
 
 @Composable
 private fun LoginTopAppBar(
-    onNavigationBack: (() -> Unit)?,
+    navigationIconIsVisible: Boolean,
     scrollBehavior: TopAppBarScrollBehavior,
+    onNavigationBack: () -> Unit,
 ) {
     LargeTopAppBar(
         title = { Text(text = stringResource(id = R.string.login_title)) },
-        navigationIcon = { if (onNavigationBack != null) NavigationBackIcon(onClick = onNavigationBack) },
+        navigationIcon = { if (navigationIconIsVisible) NavigationBackIcon(onClick = onNavigationBack) },
         scrollBehavior = scrollBehavior)
 }
 
@@ -224,7 +209,7 @@ private fun EmailTextField(
 
 @Composable
 private fun SubmitButton(
-    loginButtonState: ProgressButtonState,
+    isLoading: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = false,
@@ -232,12 +217,8 @@ private fun SubmitButton(
     ProgressButton(
         onClick = onClick,
         modifier = modifier,
-        state = loginButtonState,
+        isLoading = isLoading,
         enabled = enabled,
-        successContent = {
-            Icon(imageVector = Icons.Rounded.Done,
-                contentDescription = stringResource(id = R.string.cd_login_success))
-        },
     ) {
         Text(text = stringResource(id = R.string.login_submit))
     }

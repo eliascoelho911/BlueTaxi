@@ -1,72 +1,92 @@
 package com.bluetaxi.login.presentation
 
+import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModel
 import com.bluetaxi.commons.email.EmailValidator
-import com.bluetaxi.core.viewmodel.StateViewModel
-import com.bluetaxi.designsystem.components.ProgressButtonState
 import com.bluetaxi.login.R
 import com.bluetaxi.login.domain.entities.Credentials
 import com.bluetaxi.login.domain.usecases.LoginUseCase
 import kotlinx.coroutines.flow.catch
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
+import org.orbitmvi.orbit.syntax.simple.reduce
+import org.orbitmvi.orbit.viewmodel.container
 
 internal class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-) : StateViewModel<LoginUiState>(LoginUiState()) {
+) : ViewModel(), ContainerHost<LoginState, LoginSideEffect> {
 
-    suspend fun logIn(credentials: Credentials) {
+    override val container = container<LoginState, LoginSideEffect>(LoginState())
+
+    fun emailChanged(newValue: String) = intent {
+        reduce {
+            state.emailChanged(newValue)
+        }
+    }
+
+    private fun LoginState.emailChanged(
+        newValue: String,
+    ): LoginState {
+        val emailIsInvalid = !(emailIsInvalid && EmailValidator.isEmail(newValue))
+
+        val loginButtonIsEnabled = if (!emailIsInvalid)
+            fieldsAreNotBlank()
+        else false
+
+        return copy(email = newValue,
+            emailIsInvalid = emailIsInvalid,
+            loginButtonIsEnabled = loginButtonIsEnabled)
+    }
+
+    private fun LoginState.fieldsAreNotBlank() = email.isNotBlank() && password.isNotBlank()
+
+    fun passwordChanged(newValue: String) = intent {
+        reduce {
+            state.passwordChanged(newValue)
+        }
+    }
+
+    private fun LoginState.passwordChanged(
+        newValue: String,
+    ) = copy(password = newValue, loginButtonIsEnabled = fieldsAreNotBlank())
+
+    fun logIn() = intent {
+        val credentials = Credentials(state.email, state.password)
+
         if (!credentials.emailIsValid) {
-            emailIsInvalid()
-            return
-        }
+            reduce { state.invalidEmail() }
+        } else {
+            reduce { state.loggingIn() }
 
-        loggingIn()
-
-        loginUseCase(credentials)
-            .catch { failedToLogin() }
-            .collect {
-                successfullyLoggedIn()
-            }
-    }
-
-    private fun emailIsInvalid() {
-        setUiState {
-            LoginUiState(emailIsInvalid = true, canLogIn = false)
+            loginUseCase(credentials)
+                .catch {
+                    reduce { state.error(R.string.invalid_credentials_error) }
+                }
+                .collect {
+                    postSideEffect(LoginSideEffect.NavigateToHome)
+                }
         }
     }
 
-    private fun loggingIn() {
-        setUiState { LoginUiState(loginButtonState = ProgressButtonState.LOADING) }
+    private fun LoginState.invalidEmail() =
+        copy(emailIsInvalid = true, loginButtonIsEnabled = false)
+
+    private fun LoginState.loggingIn() = copy(isLoggingIn = true, loginButtonIsEnabled = false)
+
+    private fun LoginState.error(@StringRes message: Int) = copy(errorMessage = message)
+
+    fun errorShown() = intent {
+        reduce { state.errorShown() }
     }
 
-    private fun successfullyLoggedIn() {
-        setUiState { uiState ->
-            uiState.copy(loginButtonState = ProgressButtonState.SUCCESS,
-                isUserLoggedIn = true)
-        }
+    private fun LoginState.errorShown() = copy(errorMessage = null)
+
+    fun navigationBack() = intent {
+        postSideEffect(LoginSideEffect.NavigationBack)
     }
 
-    private fun failedToLogin() {
-        setUiState { LoginUiState(errorMessage = R.string.invalid_credentials_error) }
-    }
-
-    fun validateEmailHasBeenCorrected(email: String) {
-        if (uiState.emailIsInvalid && EmailValidator.isEmail(email))
-            emailIsValid()
-    }
-
-    private fun emailIsValid() {
-        setUiState { uiState.copy(emailIsInvalid = false) }
-    }
-
-    fun validateIfCanLogIn(email: String, password: String) {
-        if (!uiState.emailIsInvalid)
-            canDontLogin(email, password)
-    }
-
-    private fun canDontLogin(email: String, password: String) {
-        setUiState { uiState.copy(canLogIn = email.isNotBlank() && password.isNotBlank()) }
-    }
-
-    fun errorMessageShown() {
-        setUiState { uiState.copy(errorMessage = null) }
+    fun navigateToSignUp() = intent {
+        postSideEffect(LoginSideEffect.NavigateToSignUp)
     }
 }

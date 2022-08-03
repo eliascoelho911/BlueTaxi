@@ -12,11 +12,6 @@ dependencies {
     compose()
     koin()
     navigation()
-    orbit()
 
-    unitTestDependencies()
-    instrumentationTestDependencies()
-
-    commonsModule()
-    designSystemModule()
+    loginFeature()
 }

@@ -30,7 +30,7 @@ dependencies {
     compose()
 
     designSystemModule()
-    navigationModule()
+    navigation()
     commonsModule()
     loginFeature()
 }

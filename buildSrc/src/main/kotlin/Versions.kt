@@ -22,6 +22,10 @@ object Versions {
         const val fragmentTesting = "1.4.1"
     }
 
+    object Orbit {
+        const val orbit = "4.3.2"
+    }
+
     object Retrofit2 {
         const val retrofit = "2.7.1"
     }

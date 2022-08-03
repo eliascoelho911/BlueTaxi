@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.bluetaxi.designsystem.components.ProgressButtonState
 import com.bluetaxi.designsystem.theme.BlueTaxiTheme
 import com.bluetaxi.login.R
 import kotlinx.coroutines.delay
@@ -17,15 +16,7 @@ import kotlinx.coroutines.launch
 @Composable
 private fun EmailInvalidDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
-    }
-}
-
-@Preview("Success on logging in - Dark")
-@Composable
-private fun SuccessLoggingInDarkPreview() {
-    BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
+        LoginScreenPreview(targetStateOnSubmit = LoginState(emailIsInvalid = true))
     }
 }
 
@@ -33,8 +24,8 @@ private fun SuccessLoggingInDarkPreview() {
 @Composable
 private fun FailureLoggingInDarkPreview() {
     BlueTaxiTheme(useDarkTheme = true) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
-            loginButtonState = ProgressButtonState.CONTENT,
+        LoginScreenPreview(targetStateOnSubmit = LoginState(
+            isLoggingIn = false,
             errorMessage = R.string.invalid_credentials_error))
     }
 }
@@ -43,15 +34,7 @@ private fun FailureLoggingInDarkPreview() {
 @Composable
 private fun EmailInvalidLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(emailIsInvalid = true))
-    }
-}
-
-@Preview("Success on logging in - Light", showBackground = true)
-@Composable
-private fun SuccessLoggingInLightPreview() {
-    BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(loginButtonState = ProgressButtonState.SUCCESS))
+        LoginScreenPreview(targetStateOnSubmit = LoginState(emailIsInvalid = true))
     }
 }
 
@@ -59,48 +42,49 @@ private fun SuccessLoggingInLightPreview() {
 @Composable
 private fun FailureLoggingInLightPreview() {
     BlueTaxiTheme(useDarkTheme = false) {
-        LoginScreenPreview(targetUiStateOnSubmit = LoginUiState(
-            loginButtonState = ProgressButtonState.CONTENT,
+        LoginScreenPreview(targetStateOnSubmit = LoginState(
+            isLoggingIn = false,
             errorMessage = R.string.invalid_credentials_error))
     }
 }
 
 
 @Composable
-private fun LoginScreenPreview(targetUiStateOnSubmit: LoginUiState) {
-    var uiState by remember { mutableStateOf(LoginUiState()) }
+private fun LoginScreenPreview(targetStateOnSubmit: LoginState) {
+    var state by remember { mutableStateOf(LoginState()) }
     val coroutineScope = rememberCoroutineScope()
     LoginScreenPreview(
-        uiState = uiState,
-        onClickSubmit = {
+        state = state,
+        onLoginClick = {
             coroutineScope.launch {
-                uiState = LoginUiState(loginButtonState = ProgressButtonState.LOADING)
+                state = LoginState(isLoggingIn = true)
                 delay(2000)
-                uiState = targetUiStateOnSubmit
+                state = targetStateOnSubmit
             }
         },
-        onDismissLoginFailureDialog = {
-            uiState = uiState.copy(errorMessage = R.string.invalid_credentials_error)
+        onErrorDialogDismiss = {
+            state = state.copy(errorMessage = R.string.invalid_credentials_error)
         }
     )
 }
 
 @Composable
 private fun LoginScreenPreview(
-    uiState: LoginUiState,
-    onClickSubmit: () -> Unit,
-    onDismissLoginFailureDialog: () -> Unit,
+    state: LoginState,
+    onLoginClick: () -> Unit,
+    onErrorDialogDismiss: () -> Unit,
 ) {
     var email by remember { mutableStateOf(String()) }
     var password by remember { mutableStateOf(String()) }
 
-    LoginScreen(uiState = uiState,
+    LoginScreen(state = state,
         email = email,
         password = password,
         onEmailChange = { email = it },
         onPasswordChange = { password = it },
-        onClickSubmit = onClickSubmit,
-        onDismissErrorDialog = onDismissLoginFailureDialog,
+        onLoginClick = onLoginClick,
+        onErrorDialogDismiss = onErrorDialogDismiss,
+        navigationIconIsVisible = false,
         onNavigationBack = {},
         onClickSignUp = {})
 }

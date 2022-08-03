@@ -13,18 +13,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import com.github.eliascoelho911.bluetaxi.driver.R
-import com.github.eliascoelho911.bluetaxi.navigation.BlueTaxiNavigationController
+import com.github.eliascoelho911.bluetaxi.navigation.NavigationController
 import com.github.eliascoelho911.bluetaxi.navigation.Screen
 import com.github.eliascoelho911.bluetaxi.navigation.ScreenGroup
 import com.github.eliascoelho911.bluetaxi.navigation.composables.loginScreen
 import com.github.eliascoelho911.bluetaxi.navigation.composables.welcomeScreen
-import com.github.eliascoelho911.bluetaxi.navigation.rememberBlueTaxiNavigationController
+import com.github.eliascoelho911.bluetaxi.navigation.rememberNavigationController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-internal fun DriverRootNavGraph(navigationController: BlueTaxiNavigationController = rememberBlueTaxiNavigationController()) {
+internal fun DriverRootNavGraph(navigationController: NavigationController = rememberNavigationController()) {
     AnimatedNavHost(
         navController = navigationController.navHostController,
         startDestination = ScreenGroup.Auth.route
@@ -33,14 +32,14 @@ internal fun DriverRootNavGraph(navigationController: BlueTaxiNavigationControll
     }
 }
 
-private fun NavGraphBuilder.addAuthNavigation(navigationController: BlueTaxiNavigationController) {
+private fun NavGraphBuilder.addAuthNavigation(navigationController: NavigationController) {
     navigation(startDestination = Screen.Welcome.route, route = ScreenGroup.Auth.route) {
         addWelcomeScreen(navigationController)
         addLoginScreen(navigationController)
     }
 }
 
-private fun NavGraphBuilder.addWelcomeScreen(navigationController: BlueTaxiNavigationController) {
+private fun NavGraphBuilder.addWelcomeScreen(navigationController: NavigationController) {
     welcomeScreen(
         navigationController = navigationController,
         title = {
@@ -55,7 +54,7 @@ private fun NavGraphBuilder.addWelcomeScreen(navigationController: BlueTaxiNavig
     )
 }
 
-private fun NavGraphBuilder.addLoginScreen(navigationController: BlueTaxiNavigationController) {
+private fun NavGraphBuilder.addLoginScreen(navigationController: NavigationController) {
     loginScreen(
         navigationController = navigationController
     )

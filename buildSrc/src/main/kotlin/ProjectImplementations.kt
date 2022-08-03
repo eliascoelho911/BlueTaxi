@@ -5,15 +5,11 @@ fun DependencyHandlerScope.commonsModule() {
     "implementation"(project(":commons:commons"))
 }
 
-fun DependencyHandlerScope.coreModule() {
-    "implementation"(project(":commons:core"))
-}
-
 fun DependencyHandlerScope.designSystemModule() {
     "implementation"(project(":designsystem"))
 }
 
-fun DependencyHandlerScope.navigationModule() {
+fun DependencyHandlerScope.navigation() {
     "implementation"(project(":navigation"))
 }
 

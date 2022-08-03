@@ -9,6 +9,11 @@ object Dependencies {
         const val activityCompose = "androidx.activity:activity-compose:${Versions.Android.activityCompose}"
     }
 
+    object Orbit {
+        const val core = "org.orbit-mvi:orbit-core:${Versions.Orbit.orbit}"
+        const val viewModel = "org.orbit-mvi:orbit-viewmodel:${Versions.Orbit.orbit}"
+    }
+
     object Compose {
         const val ui = "androidx.compose.ui:ui:${Versions.Compose.compose}"
         const val material3 = "androidx.compose.material3:material3:${Versions.Compose.material3}"
@@ -92,4 +97,9 @@ fun DependencyHandlerScope.systemUiController() {
 
 fun DependencyHandlerScope.activityCompose() {
     "implementation"(Dependencies.Android.activityCompose)
+}
+
+fun DependencyHandlerScope.orbit() {
+    "implementation"(Dependencies.Orbit.core)
+    "implementation"(Dependencies.Orbit.viewModel)
 }
