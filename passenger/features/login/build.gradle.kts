@@ -11,7 +11,6 @@ android {
 dependencies {
     compose()
     koin()
-    navigation()
 
     loginFeature()
 }

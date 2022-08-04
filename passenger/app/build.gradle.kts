@@ -29,8 +29,7 @@ dependencies {
     activityCompose()
     compose()
 
-    designSystemModule()
-    navigation()
-    commonsModule()
+    designSystem()
+    commons()
     loginFeature()
 }

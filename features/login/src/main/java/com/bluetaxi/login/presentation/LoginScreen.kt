@@ -37,17 +37,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import com.bluetaxi.commons.android.compose.hasBackQueue
 import com.bluetaxi.designsystem.components.PasswordTextField
 import com.bluetaxi.designsystem.components.ProgressButton
 import com.bluetaxi.designsystem.components.iconButtons.NavigationBackIcon
 import com.bluetaxi.designsystem.util.horizontalScreenPadding
 import com.bluetaxi.login.R
-import com.github.eliascoelho911.bluetaxi.navigation.NavigationController
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginScreen(
-    navigationController: NavigationController,
+    navHostController: NavHostController,
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit,
 ) {
@@ -58,7 +59,7 @@ fun LoginScreen(
         viewModel.container.sideEffectFlow.collect {
             handleSideEffect(
                 it,
-                navigationController,
+                navHostController,
                 onNavigateToHome,
                 onNavigateToSignUp
             )
@@ -69,7 +70,7 @@ fun LoginScreen(
         state = state,
         email = state.email,
         password = state.password,
-        navigationIconIsVisible = navigationController.hasBackQueue,
+        navigationIconIsVisible = navHostController.hasBackQueue,
         onEmailChange = { viewModel.emailChanged(it) },
         onPasswordChange = { viewModel.passwordChanged(it) },
         onLoginClick = { viewModel.logIn() },
@@ -81,13 +82,13 @@ fun LoginScreen(
 
 private fun handleSideEffect(
     sideEffect: LoginSideEffect,
-    navigationController: NavigationController,
+    navHostController: NavHostController,
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit,
 ) {
     when (sideEffect) {
         LoginSideEffect.NavigateToHome -> onNavigateToHome()
-        LoginSideEffect.NavigationBack -> navigationController.popBackStack()
+        LoginSideEffect.NavigationBack -> navHostController.popBackStack()
         LoginSideEffect.NavigateToSignUp -> onNavigateToSignUp()
     }
 }

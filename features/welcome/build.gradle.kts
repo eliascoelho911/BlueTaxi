@@ -15,5 +15,5 @@ dependencies {
     unitTestDependencies()
     instrumentationTestDependencies()
 
-    designSystemModule()
+    designSystem()
 }

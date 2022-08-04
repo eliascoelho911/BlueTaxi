@@ -1,16 +1,12 @@
 import org.gradle.kotlin.dsl.DependencyHandlerScope
 import org.gradle.kotlin.dsl.project
 
-fun DependencyHandlerScope.commonsModule() {
+fun DependencyHandlerScope.commons() {
     "implementation"(project(":commons:commons"))
 }
 
-fun DependencyHandlerScope.designSystemModule() {
+fun DependencyHandlerScope.designSystem() {
     "implementation"(project(":designsystem"))
-}
-
-fun DependencyHandlerScope.navigation() {
-    "implementation"(project(":navigation"))
 }
 
 fun DependencyHandlerScope.loginFeature() {

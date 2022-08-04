@@ -11,12 +11,12 @@ android {
 dependencies {
     compose()
     koin()
-    navigation()
     orbit()
+    composeNavigation()
 
     unitTestDependencies()
     instrumentationTestDependencies()
 
-    commonsModule()
-    designSystemModule()
+    commons()
+    designSystem()
 }
