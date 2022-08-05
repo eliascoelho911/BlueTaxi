@@ -49,6 +49,10 @@ object Dependencies {
     object OkHttp {
         const val okHttp = "com.squareup.okhttp3:okhttp:${Versions.OkHttp3.okhttp}"
     }
+
+    object Kotlin {
+        const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Kotlin.coroutines}"
+    }
 }
 
 fun DependencyHandlerScope.compose() {
@@ -81,6 +85,10 @@ fun DependencyHandlerScope.appCompat() {
 
 fun DependencyHandlerScope.viewModel() {
     "implementation"(Dependencies.Android.viewModel)
+}
+
+fun DependencyHandlerScope.coroutines() {
+    "implementation"(Dependencies.Kotlin.coroutines)
 }
 
 fun DependencyHandlerScope.composeNavigation() {

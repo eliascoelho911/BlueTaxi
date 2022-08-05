@@ -10,9 +10,17 @@ fun DependencyHandlerScope.designSystem() {
 }
 
 fun DependencyHandlerScope.loginFeature() {
-    "implementation"(project(":features:login"))
+    "implementation"(project(":features:authentication:login"))
+}
+
+fun DependencyHandlerScope.authenticationDomain() {
+    "implementation"(project(":features:authentication:shared-domain"))
 }
 
 fun DependencyHandlerScope.welcomeFeature() {
-    "implementation"(project(":features:welcome"))
+    "implementation"(project(":features:authentication:welcome"))
+}
+
+fun DependencyHandlerScope.passengerNavigation() {
+    "implementation"(project(":passenger:navigation"))
 }

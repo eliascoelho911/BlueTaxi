@@ -2,7 +2,7 @@ object Versions {
 
     object Kotlin {
         const val kotlin = "1.6.10"
-        const val coroutines = "1.3.3"
+        const val coroutines = "1.5.1"
     }
 
     object Android {
@@ -66,6 +66,6 @@ object Versions {
     }
 
     object Accompanist {
-        const val navigationAnimation = "0.24.13-rc"
+        const val navigationAnimation = "0.25.0"
     }
 }
