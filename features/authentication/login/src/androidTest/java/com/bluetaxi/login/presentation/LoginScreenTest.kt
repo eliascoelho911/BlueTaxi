@@ -2,9 +2,9 @@ package com.bluetaxi.login.presentation
 
 import androidx.compose.runtime.Composable
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.bluetaxi.authentication.domain.usecases.LoginUseCase
 import com.bluetaxi.designsystem.theme.BlueTaxiTheme
 import com.bluetaxi.login.di.LoginUiModule
-import com.bluetaxi.authentication.domain.usecases.LoginUseCase
 import com.bluetaxi.test.BaseComposableTest
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -92,10 +92,7 @@ class LoginScreenTest : BaseComposableTest() {
 
         setContent {
             BlueTaxiTheme {
-                LoginScreen(onUserLogIn = onUserLogIn,
-                    delayToFinishLogin = 0,
-                    onNavigationBack = {},
-                    onClickSignUp = {})
+                LoginScreenImpl()
             }
         }
 
@@ -128,6 +125,8 @@ class LoginScreenTest : BaseComposableTest() {
 
     @Composable
     private fun LoginScreenImpl() {
-        LoginScreen(onUserLogIn = {}, onNavigationBack = {}, onClickSignUp = {})
+        LoginScreen(
+            onNavigateToHome = {},
+            onNavigateToSignUp = {})
     }
 }

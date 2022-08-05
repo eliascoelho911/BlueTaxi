@@ -1,21 +1,19 @@
 package com.bluetaxi.login.presentation
 
-import com.bluetaxi.commons.email.EmailValidator
-import com.bluetaxi.designsystem.components.ProgressButtonState
-import com.bluetaxi.authentication.domain.entities.Credentials
 import com.bluetaxi.authentication.domain.usecases.LoginUseCase
+import com.bluetaxi.commons.email.EmailValidator
+import com.bluetaxi.login.R
+import com.bluetaxi.test.runOrbitTest
+import com.bluetaxi.test.state
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
-import kotlin.test.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.Test
-import com.bluetaxi.login.R
-import java.lang.IllegalArgumentException
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
@@ -25,43 +23,60 @@ class LoginViewModelTest {
 
     @Test
     fun givenInvalidEmail_whenLogIn_shouldEmitInvalidEmailState() = runTest {
+        val initialState = LoginState()
+
         mockEmailValidator(isEmail = false)
 
-        viewModel.logIn(INVALID_CREDENTIALS)
+        viewModel.runOrbitTest(initialState) {
+            testIntent { viewModel.logIn() }
 
-        viewModel.uiState.assertEquals(LoginUiState(emailIsInvalid = true, canLogIn = false))
+            assert(initialState) {
+                state { invalidEmail() }
+            }
+        }
     }
 
     @Test
-    fun givenCorrectCredentials_whenLogIn_shouldEmitSuccessfullyLoggedInState() = runTest {
-        mockEmailValidator(isEmail = true)
-        onSuccessfullyLogged()
+    fun givenValidEmailAndSuccessfulLogin_whenLogIn_shouldEmitSuccessfullyLoggedInState() =
+        runTest {
+            val initialState = LoginState(email = VALID_EMAIL, password = VALID_PASSWORD)
 
-        viewModel.logIn(VALID_CREDENTIALS)
+            mockEmailValidator(isEmail = true)
+            onSuccessfullyLogged()
 
-        viewModel.uiState.assertEquals(LoginUiState(
-            loginButtonState = ProgressButtonState.SUCCESS,
-            isUserLoggedIn = true))
-    }
+            viewModel.runOrbitTest(initialState) {
+                testIntent { viewModel.logIn() }
+
+                assert(initialState) {
+                    state { loggingIn() }
+                    postedSideEffects(LoginSideEffect.NavigateToHome)
+                }
+            }
+        }
 
     @Test
-    fun givenIncorrectCredentials_whenLogIn_shouldEmitFailedToLoginState() = runTest {
+    fun givenValidEmailAndUnsuccessfulLogin_whenLogIn_shouldEmitFailedToLoginState() = runTest {
         mockEmailValidator(isEmail = true)
         onFailedToLogin()
 
-        viewModel.logIn(VALID_CREDENTIALS)
+        val initialState = LoginState(email = VALID_EMAIL, password = VALID_PASSWORD)
 
-        viewModel.uiState.assertEquals(LoginUiState(errorMessage = R.string.invalid_credentials_error))
+        viewModel.runOrbitTest(initialState) {
+            testIntent { viewModel.logIn() }
+
+            assert(initialState) {
+                states(
+                    { loggingIn() },
+                    { error(R.string.invalid_credentials_error) }
+                )
+            }
+        }
     }
 
     private fun mockEmailValidator(isEmail: Boolean) {
         mockkObject(EmailValidator)
 
         every { EmailValidator.isEmail(any()) } returns isEmail
-    }
-
-    private fun LoginUiState.assertEquals(expected: LoginUiState) {
-        assertEquals(expected, this)
     }
 
     private fun onSuccessfullyLogged() {
@@ -75,5 +90,5 @@ class LoginViewModelTest {
     }
 }
 
-private val INVALID_CREDENTIALS = Credentials("email", "pass")
-private val VALID_CREDENTIALS = Credentials("email@email.com", "pass")
+private const val VALID_EMAIL = "email@email.com"
+private const val VALID_PASSWORD = "pass"

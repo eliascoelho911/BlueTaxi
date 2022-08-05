@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.bluetaxi.commons.android.compose.hasBackQueue
 import com.bluetaxi.designsystem.components.PasswordTextField
 import com.bluetaxi.designsystem.components.ProgressButton
@@ -49,7 +50,7 @@ import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun LoginScreen(
-    navHostController: NavHostController,
+    navHostController: NavHostController = rememberNavController(),
     onNavigateToHome: () -> Unit,
     onNavigateToSignUp: () -> Unit,
 ) {

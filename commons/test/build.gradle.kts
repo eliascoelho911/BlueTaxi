@@ -15,4 +15,6 @@ dependencies {
     implementation(TestDependencies.Compose.junit4)
     implementation(TestDependencies.Android.coreKtx)
     implementation(TestDependencies.Android.coreTesting)
+    implementation(TestDependencies.Orbit.test)
+    orbit()
 }

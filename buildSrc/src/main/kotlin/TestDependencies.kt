@@ -46,11 +46,16 @@ object TestDependencies {
         const val junit4 = "androidx.compose.ui:ui-test-junit4:${Versions.Compose.compose}"
         const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.Compose.compose}"
     }
+
+    object Orbit {
+        const val test = "org.orbit-mvi:orbit-test:${Versions.Orbit.orbit}"
+    }
 }
 
 fun DependencyHandlerScope.unitTestDependencies() {
     "testImplementation"(TestDependencies.JUnit.junit)
     "testImplementation"(TestDependencies.MockK.mockK)
+    "testImplementation"(TestDependencies.Orbit.test)
 }
 
 fun DependencyHandlerScope.instrumentationTestDependencies() {
