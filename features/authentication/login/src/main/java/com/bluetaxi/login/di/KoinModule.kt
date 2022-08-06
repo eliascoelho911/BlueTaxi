@@ -4,6 +4,6 @@ import com.bluetaxi.login.presentation.LoginViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
-val LoginUiModule = module {
+val LoginModule = module {
     viewModel { LoginViewModel(get()) }
 }

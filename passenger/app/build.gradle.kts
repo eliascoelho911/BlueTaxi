@@ -27,9 +27,10 @@ dependencies {
     appCompat()
     composeNavigationAnimation()
     activityCompose()
-    compose()
-
     designSystem()
     commons()
-    loginFeature()
+    commonsAndroid()
+    passengerLoginFeature()
+    passengerWelcomeFeature()
+    passengerNavigation()
 }

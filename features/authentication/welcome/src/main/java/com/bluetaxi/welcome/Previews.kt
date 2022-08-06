@@ -31,6 +31,6 @@ private fun WelcomeScreenImpl() {
         subtitle = {
             Text(text = "Peça uma viagem quando e onde quiser")
         },
-        onClickEnterWithEmail = { },
-        onClickSignUp = {})
+        onNavigateToLogin = { },
+        onNavigateToSignUp = {})
 }

@@ -6,13 +6,18 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "BlueTaxi"
-include ':driver:app'
-include ':passenger:app'
 include ':commons:test'
 include ':commons:commons'
+include ':commons:android'
 include ':designsystem'
 include ':features:authentication:shared-domain'
 include ':features:authentication:login'
 include ':features:authentication:welcome'
+include ':passenger:app'
 include ':passenger:navigation'
 include ':passenger:features:authentication:login'
+include ':passenger:features:authentication:welcome'
+include ':driver:app'
+include ':driver:navigation'
+include ':driver:features:authentication:login'
+include ':driver:features:authentication:welcome'

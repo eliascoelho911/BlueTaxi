@@ -1,11 +1,9 @@
 package com.bluetaxi.login.presentation
 
-import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
-import com.bluetaxi.commons.email.EmailValidator
-import com.bluetaxi.login.R
 import com.bluetaxi.authentication.domain.entities.Credentials
 import com.bluetaxi.authentication.domain.usecases.LoginUseCase
+import com.bluetaxi.login.R
 import kotlinx.coroutines.flow.catch
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent

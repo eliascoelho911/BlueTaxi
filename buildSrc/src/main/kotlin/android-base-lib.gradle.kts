@@ -16,7 +16,7 @@ android {
 
         vectorDrawables.useSupportLibrary = true
 
-        testInstrumentationRunner = "com.github.eliascoelho911.bluetaxi.commons.test.AndroidTestRunner"
+        testInstrumentationRunner = "com.bluetaxi.test.AndroidTestRunner"
     }
 
     testOptions {

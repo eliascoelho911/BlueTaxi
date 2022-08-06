@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bluetaxi.authentication.domain.usecases.LoginUseCase
 import com.bluetaxi.designsystem.theme.BlueTaxiTheme
-import com.bluetaxi.login.di.LoginUiModule
+import com.bluetaxi.login.di.LoginModule
 import com.bluetaxi.test.BaseComposableTest
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -88,7 +88,6 @@ class LoginScreenTest : BaseComposableTest() {
     @Test
     fun givenCorrectCredentials_whenTryToLogin_shouldNotDisplayErrorDialogAnd() = composableTest {
         onSuccessfullyLogged()
-        val onUserLogIn = mockk<() -> Unit>(relaxed = true)
 
         setContent {
             BlueTaxiTheme {
@@ -101,7 +100,6 @@ class LoginScreenTest : BaseComposableTest() {
             enterAnyPassword()
             clickOnLogInButton()
             assertErrorDialogDoesNotExist()
-            verify { onUserLogIn() }
         }
     }
 
@@ -110,7 +108,7 @@ class LoginScreenTest : BaseComposableTest() {
             single { loginUseCase }
             viewModel { viewModel }
         }
-        loadKoinModules(listOf(LoginUiModule, mockModule))
+        loadKoinModules(listOf(LoginModule, mockModule))
     }
 
     private fun onSuccessfullyLogged() {

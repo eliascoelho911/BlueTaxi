@@ -11,9 +11,8 @@ android {
 dependencies {
     compose()
     constraintLayoutCompose()
+    designSystem()
 
     unitTestDependencies()
     instrumentationTestDependencies()
-
-    designSystem()
 }

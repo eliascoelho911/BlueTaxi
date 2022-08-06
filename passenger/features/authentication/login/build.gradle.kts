@@ -14,4 +14,5 @@ dependencies {
     loginFeature()
     authenticationDomain()
     passengerNavigation()
+    composeNavigation()
 }

@@ -31,8 +31,8 @@ import com.bluetaxi.designsystem.util.screenPadding
 fun WelcomeScreen(
     title: @Composable ColumnScope.() -> Unit,
     subtitle: @Composable ColumnScope.() -> Unit,
-    onClickEnterWithEmail: () -> Unit,
-    onClickSignUp: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    onNavigateToSignUp: () -> Unit,
 ) {
     Surface(
         color = MaterialTheme.colorScheme.background,
@@ -68,11 +68,11 @@ fun WelcomeScreen(
                 },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Button(onClick = onClickEnterWithEmail, modifier = Modifier.fillMaxWidth()) {
+                Button(onClick = onNavigateToLogin, modifier = Modifier.fillMaxWidth()) {
                     Text(text = stringResource(id = R.string.enter_with_email))
                 }
 
-                TextButton(onClick = onClickSignUp) {
+                TextButton(onClick = onNavigateToSignUp) {
                     Text(text = buildAnnotatedString {
                         append(stringResource(id = R.string.dont_have_account))
                         append(" ")

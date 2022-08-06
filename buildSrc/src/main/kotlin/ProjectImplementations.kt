@@ -5,6 +5,10 @@ fun DependencyHandlerScope.commons() {
     "implementation"(project(":commons:commons"))
 }
 
+fun DependencyHandlerScope.commonsAndroid() {
+    "implementation"(project(":commons:android"))
+}
+
 fun DependencyHandlerScope.designSystem() {
     "implementation"(project(":designsystem"))
 }
@@ -23,4 +27,24 @@ fun DependencyHandlerScope.welcomeFeature() {
 
 fun DependencyHandlerScope.passengerNavigation() {
     "implementation"(project(":passenger:navigation"))
+}
+
+fun DependencyHandlerScope.passengerLoginFeature() {
+    "implementation"(project(":passenger:features:authentication:login"))
+}
+
+fun DependencyHandlerScope.passengerWelcomeFeature() {
+    "implementation"(project(":passenger:features:authentication:welcome"))
+}
+
+fun DependencyHandlerScope.driverNavigation() {
+    "implementation"(project(":driver:navigation"))
+}
+
+fun DependencyHandlerScope.driverLoginFeature() {
+    "implementation"(project(":driver:features:authentication:login"))
+}
+
+fun DependencyHandlerScope.driverWelcomeFeature() {
+    "implementation"(project(":driver:features:authentication:welcome"))
 }

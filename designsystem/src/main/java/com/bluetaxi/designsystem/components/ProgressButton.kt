@@ -49,7 +49,7 @@ fun ProgressButton(
     Button(
         onClick = onClick,
         modifier = modifier,
-        enabled = if (isLoading) enabled else false,
+        enabled = if (!isLoading) enabled else false,
         interactionSource = interactionSource,
         elevation = elevation,
         shape = shape,

@@ -3,22 +3,22 @@ package com.bluetaxi.login.presentation
 import androidx.annotation.StringRes
 import com.bluetaxi.commons.email.EmailValidator
 
-fun LoginState.invalidEmail() =
+internal fun LoginState.invalidEmail() =
     copy(emailIsInvalid = true, loginButtonIsEnabled = false)
 
-fun LoginState.loggingIn() = copy(isLoggingIn = true, loginButtonIsEnabled = false)
+internal fun LoginState.loggingIn() = copy(isLoggingIn = true, loginButtonIsEnabled = false)
 
-fun LoginState.error(@StringRes message: Int) = copy(errorMessage = message)
+internal fun LoginState.error(@StringRes message: Int) = copy(errorMessage = message, isLoggingIn = false)
 
-fun LoginState.errorShown() = copy(errorMessage = null)
+internal fun LoginState.errorShown() = copy(errorMessage = null)
 
-fun LoginState.emailChanged(
+internal fun LoginState.emailChanged(
     newValue: String,
 ): LoginState {
-    val emailIsInvalid = !(emailIsInvalid && EmailValidator.isEmail(newValue))
+    val emailIsInvalid = if (emailIsInvalid) !EmailValidator.isEmail(newValue) else false
 
     val loginButtonIsEnabled = if (!emailIsInvalid)
-        fieldsAreNotBlank()
+        newValue.isNotBlank() && password.isNotBlank()
     else false
 
     return copy(email = newValue,
@@ -26,8 +26,6 @@ fun LoginState.emailChanged(
         loginButtonIsEnabled = loginButtonIsEnabled)
 }
 
-private fun LoginState.fieldsAreNotBlank() = email.isNotBlank() && password.isNotBlank()
-
-fun LoginState.passwordChanged(
+internal fun LoginState.passwordChanged(
     newValue: String,
-) = copy(password = newValue, loginButtonIsEnabled = fieldsAreNotBlank())
+) = copy(password = newValue, loginButtonIsEnabled = email.isNotBlank() && newValue.isNotBlank())
