@@ -1,10 +1,10 @@
-package com.bluetaxi.driver.login.di
+package com.bluetaxi.passenger.login.di
 
 import com.bluetaxi.authentication.domain.usecases.LoginUseCase
 import com.bluetaxi.login.di.LoginModule
 import com.bluetaxi.login.domain.repositories.LoginRepository
-import com.bluetaxi.driver.login.data.LoginRepositoryMock
-import com.bluetaxi.driver.login.domain.LoginUseCaseImpl
+import com.bluetaxi.passenger.login.data.LoginRepositoryMock
+import com.bluetaxi.passenger.login.domain.LoginUseCaseImpl
 import org.koin.dsl.module
 
 val PassengerLoginModule = LoginModule.plus(module {

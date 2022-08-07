@@ -6,7 +6,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import com.bluetaxi.commons.android.navigation.transitions.transitionSlideInHorizontal
-import com.bluetaxi.driver.login.presentation.LoginScreen
+import com.bluetaxi.passenger.login.presentation.LoginScreen
 import com.bluetaxi.passenger.navigation.NavigationController
 import com.bluetaxi.passenger.navigation.Screen
 import com.bluetaxi.passenger.navigation.rememberNavigationController

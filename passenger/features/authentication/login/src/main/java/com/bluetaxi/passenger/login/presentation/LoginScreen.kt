@@ -1,7 +1,7 @@
-package com.bluetaxi.driver.login.presentation
+package com.bluetaxi.passenger.login.presentation
 
 import androidx.compose.runtime.Composable
-import com.bluetaxi.driver.navigation.NavigationController
+import com.bluetaxi.passenger.navigation.NavigationController
 
 @Composable
 fun LoginScreen(navigationController: NavigationController) {

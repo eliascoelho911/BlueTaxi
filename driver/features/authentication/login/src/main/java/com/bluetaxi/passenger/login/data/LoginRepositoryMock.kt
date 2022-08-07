@@ -1,4 +1,4 @@
-package com.bluetaxi.driver.login.data
+package com.bluetaxi.passenger.login.data
 
 import com.bluetaxi.authentication.domain.entities.AccessToken
 import com.bluetaxi.authentication.domain.entities.Credentials

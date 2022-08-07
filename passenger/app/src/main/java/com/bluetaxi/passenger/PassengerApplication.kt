@@ -1,7 +1,7 @@
 package com.bluetaxi.passenger
 
 import android.app.Application
-import com.bluetaxi.driver.login.di.PassengerLoginModule
+import com.bluetaxi.passenger.login.di.PassengerLoginModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
